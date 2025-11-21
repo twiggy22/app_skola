@@ -12,6 +12,7 @@ This project is a React application for primary school education ("Škola Hrou")
 
 ## Project Structure
 - `src/modules/grade1/math/`: Contains all math games for 1st grade.
+- `src/modules/grade1/czech/`: Contains all czech language games for 1st grade.
 - `src/config.js`: Global configuration (e.g., `maxNumber` for difficulty).
 - `src/layouts/`: Shared layouts (navigation, etc.).
 
@@ -26,6 +27,11 @@ This project is a React application for primary school education ("Škola Hrou")
 8.  **GeometryGame**: Shape recognition. Uses **Drag & Drop** for better mobile UX (touch-none container).
 9.  **ClockGame**: Analog/Digital time. Custom SVG clock component.
 10. **MoneyGame**: Shopping simulation with coins.
+
+## Implemented Games (Grade 1 Czech)
+1.  **LettersGame**: Matching uppercase and lowercase letters.
+2.  **SyllablesGame**: Matching uppercase and lowercase syllables.
+3.  **WordsGame**: Matching words to images (and vice versa).
 
 ## Design Guidelines
 - **Mobile First**: All games must be responsive.

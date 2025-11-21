@@ -16,8 +16,12 @@ Interaktivní výuková aplikace pro děti na prvním stupni ZŠ.
 - ⏰ **Hodiny**: Poznávání času (ručičkové i digitální).
 - 💰 **Peníze**: Nakupování a placení mincemi.
 
+### 1. Třída - Čeština
+- 🅰️ **Písmenka**: Přiřazování velkých a malých písmen.
+- 🗣️ **Slabiky**: Čtení a párování slabik (MA - ma).
+- 📖 **Slova**: Čtení slov s obrázky (PES - 🐶).
+
 ### Další funkce
-- 📖 **Čtení**: (Plánováno)
 - 🎉 **Odměny**: Vizuální efekty (konfety) za správné odpovědi.
 - 📱 **Responzivní design**: Hry jsou optimalizované pro mobily i tablety.
 
