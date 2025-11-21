@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Star, Lightbulb, X } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 const CONSONANTS = ['M', 'L', 'S', 'P', 'T', 'J', 'N', 'V', 'Z', 'D', 'K'];
@@ -66,7 +66,7 @@ export function SyllablesGame() {
       });
       setTimeout(startNewRound, 1500);
     } else {
-      setMessage('Zkus to znovu.');
+      setMessage('Zkus to znovu');
     }
   };
 
@@ -134,8 +134,9 @@ export function SyllablesGame() {
       </div>
 
       {message && (
-        <div className={`text-2xl font-bold ${message.includes('Správně') ? 'text-green-600' : 'text-red-500'}`}>
+        <div className={`text-2xl font-bold flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500 animate-shake'}`}>
           {message}
+          {!message.includes('Správně') && <Frown className="inline-block" />}
         </div>
       )}
 

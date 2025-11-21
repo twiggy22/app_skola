@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Star, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Star, RefreshCw, ArrowLeft, Frown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function ComparisonGame({ maxNumber = 20 }) {
@@ -37,7 +37,7 @@ export function ComparisonGame({ maxNumber = 20 }) {
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       setTimeout(generateGame, 1500);
     } else {
-      setMessage('Zkus to znovu.');
+      setMessage('Zkus to znovu');
     }
   };
 
@@ -96,8 +96,9 @@ export function ComparisonGame({ maxNumber = 20 }) {
       </div>
 
       {message && (
-        <div className={`mt-8 text-2xl font-bold ${message.includes('Správně') ? 'text-green-600' : 'text-red-500'}`}>
+        <div className={`mt-8 text-2xl font-bold flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500 animate-shake'}`}>
           {message}
+          {!message.includes('Správně') && <Frown className="inline-block" />}
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Lightbulb, X, Star } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lightbulb, X, Star, Frown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function MemoryGame({ maxNumber = 20 }) {
@@ -11,6 +11,7 @@ export function MemoryGame({ maxNumber = 20 }) {
   const [matchedPairs, setMatchedPairs] = useState(0);
   const [moves, setMoves] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
+  const [message, setMessage] = useState('');
 
   const generateCards = () => {
     const numPairs = 6; // 12 cards total
@@ -54,6 +55,7 @@ export function MemoryGame({ maxNumber = 20 }) {
     setMatchedPairs(0);
     setMoves(0);
     setIsLocked(false);
+    setMessage('');
   };
 
   useEffect(() => {
@@ -87,6 +89,7 @@ export function MemoryGame({ maxNumber = 20 }) {
     const isMatch = card1.value === card2.value && card1.id !== card2.id;
 
     if (isMatch) {
+      setMessage('Správně! 🎉');
       const newCards = currentCards.map(c => 
         c.id === card1.id || c.id === card2.id 
           ? { ...c, isMatched: true, isFlipped: true } 
@@ -103,7 +106,9 @@ export function MemoryGame({ maxNumber = 20 }) {
         }
         return newCount;
       });
+      setTimeout(() => setMessage(''), 1500);
     } else {
+      setMessage('Zkus to znovu');
       // No match, flip back after delay
       setTimeout(() => {
         const newCards = currentCards.map(c => 
@@ -114,6 +119,7 @@ export function MemoryGame({ maxNumber = 20 }) {
         setCards(newCards);
         setFlippedCards([]);
         setIsLocked(false);
+        setMessage('');
       }, 1000);
     }
   };
@@ -194,6 +200,13 @@ export function MemoryGame({ maxNumber = 20 }) {
           >
             Hrát znovu
           </button>
+        </div>
+      )}
+
+      {message && (
+        <div className={`mt-8 text-2xl font-bold flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500 animate-shake'}`}>
+          {message}
+          {!message.includes('Správně') && <Frown className="inline-block" />}
         </div>
       )}
 

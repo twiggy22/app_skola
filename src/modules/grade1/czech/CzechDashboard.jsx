@@ -34,6 +34,20 @@ export function CzechDashboard() {
           <h3 className="text-xl font-bold text-gray-800">Slova</h3>
           <p className="text-gray-500 text-sm">Čtení slov s obrázky</p>
         </Link>
+
+        {/* Word Composition Game */}
+        <Link to="composition" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-orange-200 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
+          <div className="text-6xl mb-2">🧩</div>
+          <h3 className="text-xl font-bold text-gray-800">Skládání</h3>
+          <p className="text-gray-500 text-sm">Skládání slov ze slabik</p>
+        </Link>
+
+        {/* Sentence Game */}
+        <Link to="sentences" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-orange-200 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
+          <div className="text-6xl mb-2">✏️</div>
+          <h3 className="text-xl font-bold text-gray-800">Doplňovačka</h3>
+          <p className="text-gray-500 text-sm">Doplň slovo do věty</p>
+        </Link>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Lightbulb, X, Star, Clock } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lightbulb, X, Star, Clock, Frown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function ClockGame() {
@@ -10,6 +10,7 @@ export function ClockGame() {
   const [options, setOptions] = useState([]);
   const [mode, setMode] = useState('read'); // 'read' (analog -> digital) or 'set' (digital -> analog options)
   const [isCorrect, setIsCorrect] = useState(null); // null, true, false
+  const [message, setMessage] = useState('');
 
   const generateTime = () => {
     // 1st grade: Whole hours and half hours
@@ -56,12 +57,17 @@ export function ClockGame() {
 
     if (selectedTime.hours === targetTime.hours && selectedTime.minutes === targetTime.minutes) {
       setIsCorrect(true);
+      setMessage('Správně! 🎉');
       setScore(s => s + 1);
       confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       setTimeout(generateGame, 1500);
     } else {
       setIsCorrect(false);
-      setTimeout(() => setIsCorrect(null), 1000);
+      setMessage('Zkus to znovu');
+      setTimeout(() => {
+        setIsCorrect(null);
+        setMessage('');
+      }, 1000);
     }
   };
 
@@ -231,9 +237,10 @@ export function ClockGame() {
         </div>
 
         {/* Feedback Message */}
-        {isCorrect === false && (
-          <div className="text-red-500 text-xl font-bold animate-shake">
-            Zkus to znovu!
+        {message && (
+          <div className={`text-xl font-bold animate-shake flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500'}`}>
+            {message}
+            {!message.includes('Správně') && <Frown className="inline-block" />}
           </div>
         )}
       </div>

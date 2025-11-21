@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Lightbulb, X, Star } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lightbulb, X, Star, Frown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function NumberLineGame({ maxNumber = 20 }) {
@@ -10,6 +10,7 @@ export function NumberLineGame({ maxNumber = 20 }) {
   const [options, setOptions] = useState([]);
   const [draggedItem, setDraggedItem] = useState(null);
   const [isComplete, setIsComplete] = useState(false);
+  const [message, setMessage] = useState('');
 
   const generateGame = () => {
     setIsComplete(false);
@@ -85,6 +86,12 @@ export function NumberLineGame({ maxNumber = 20 }) {
     newSequence[index].filledValue = droppedValue;
     setSequence(newSequence);
 
+    if (droppedValue !== targetSlot.value) {
+      setMessage('Zkus to znovu');
+    } else {
+      setMessage('');
+    }
+
     // Update options
     // 1. Remove the dropped value from options
     let newOptions = options.filter(opt => opt.id !== draggedItem.id);
@@ -105,6 +112,7 @@ export function NumberLineGame({ maxNumber = 20 }) {
 
     if (allCorrect) {
         setIsComplete(true);
+        setMessage('Správně! 🎉');
         setScore(s => s + 1);
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
@@ -223,6 +231,13 @@ export function NumberLineGame({ maxNumber = 20 }) {
           ))
         )}
       </div>
+
+      {message && (
+        <div className={`mt-8 text-2xl font-bold flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500 animate-shake'}`}>
+          {message}
+          {!message.includes('Správně') && <Frown className="inline-block" />}
+        </div>
+      )}
 
       {/* Help Modal */}
       {showHelp && (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Lightbulb, X, Star } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lightbulb, X, Star, Frown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const SHAPES = [
@@ -36,6 +36,7 @@ export function GeometryGame() {
   const [targetShape, setTargetShape] = useState(null);
   const [foundCount, setFoundCount] = useState(0);
   const [totalTargetCount, setTotalTargetCount] = useState(0);
+  const [message, setMessage] = useState('');
   
   // Dragging state
   const containerRef = useRef(null);
@@ -182,6 +183,7 @@ export function GeometryGame() {
 
     if (item.shapeId === targetShape.id) {
       // Correct
+      setMessage('Správně! 🎉');
       const newItems = gameItems.map(i => 
         i.id === item.id ? { ...i, isFound: true } : i
       );
@@ -194,8 +196,10 @@ export function GeometryGame() {
         setScore(s => s + 1);
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       }
+      setTimeout(() => setMessage(''), 1000);
     } else {
       // Wrong
+      setMessage('Zkus to znovu');
       const newItems = gameItems.map(i => 
         i.id === item.id ? { ...i, isWrong: true } : i
       );
@@ -206,7 +210,8 @@ export function GeometryGame() {
         setGameItems(prev => prev.map(i => 
           i.id === item.id ? { ...i, isWrong: false } : i
         ));
-      }, 500);
+        setMessage('');
+      }, 1000);
     }
   };
 
@@ -320,6 +325,13 @@ export function GeometryGame() {
           ))
         )}
       </div>
+
+      {message && (
+        <div className={`mt-8 text-2xl font-bold flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500 animate-shake'}`}>
+          {message}
+          {!message.includes('Správně') && <Frown className="inline-block" />}
+        </div>
+      )}
 
       {/* Help Modal */}
       {showHelp && (

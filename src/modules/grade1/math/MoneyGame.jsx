@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Lightbulb, X, Star, ShoppingCart, Trash2 } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lightbulb, X, Star, ShoppingCart, Trash2, Frown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ITEMS = [
@@ -173,8 +173,9 @@ export function MoneyGame() {
           </button>
 
           {message && (
-            <div className={`mt-4 text-center font-bold ${message.includes('Správně') ? 'text-green-600' : 'text-red-500'}`}>
+            <div className={`mt-4 text-center font-bold flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500 animate-shake'}`}>
               {message}
+              {!message.includes('Správně') && <Frown className="inline-block" />}
             </div>
           )}
         </div>

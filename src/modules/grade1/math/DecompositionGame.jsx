@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Check, Lightbulb, X, Star } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Check, Lightbulb, X, Star, Frown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function DecompositionGame({ maxNumber = 20 }) {
@@ -11,6 +11,7 @@ export function DecompositionGame({ maxNumber = 20 }) {
   const [inputs, setInputs] = useState({});
   const [results, setResults] = useState({}); // 'correct' | 'incorrect' | null
   const [isComplete, setIsComplete] = useState(false);
+  const [message, setMessage] = useState('');
 
   const generateGame = () => {
     // Target number should be at least 2
@@ -82,8 +83,11 @@ export function DecompositionGame({ maxNumber = 20 }) {
 
     if (allCorrect && !hasEmpty) {
       setIsComplete(true);
+      setMessage('Správně! 🎉');
       setScore(prev => prev + 1);
       confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    } else {
+      setMessage('Zkus to znovu');
     }
   };
 
@@ -191,15 +195,21 @@ export function DecompositionGame({ maxNumber = 20 }) {
             </button>
           </div>
         ) : (
-          <button 
+          <button
             onClick={checkAnswers}
-            className="flex items-center gap-2 px-8 py-3 bg-green-500 text-white text-xl rounded-full hover:bg-green-600 transition-colors shadow-lg font-bold"
+            className="mt-8 px-8 py-3 bg-blue-600 text-white text-xl rounded-full hover:bg-blue-700 transition-colors shadow-lg font-bold flex items-center gap-2"
           >
-            <Check className="w-6 h-6" />
-            Zkontrolovat
+            <Check /> Zkontrolovat
           </button>
         )}
       </div>
+
+      {message && (
+        <div className={`mt-8 text-2xl font-bold flex items-center justify-center gap-2 ${message.includes('Správně') ? 'text-green-600' : 'text-red-500 animate-shake'}`}>
+          {message}
+          {!message.includes('Správně') && <Frown className="inline-block" />}
+        </div>
+      )}
 
       {/* Help Modal */}
       {showHelp && (
