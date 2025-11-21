@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown, Save, Trophy } from 'l
 import confetti from 'canvas-confetti';
 import { saveScore } from '../../../services/scoreService';
 import { Leaderboard } from '../../../components/Leaderboard';
+import { GameConfig, isContentAllowed } from '../../../config';
 
 const WORDS = [
   { text: 'PES', emoji: '🐶' },
@@ -30,7 +31,35 @@ const WORDS = [
   { text: 'HADA', emoji: '🐍' },
   { text: 'MYŠ', emoji: '🐭' },
   { text: 'SŮL', emoji: '🧂' },
+  { text: 'POLE', emoji: '🌾' },
+  { text: 'LOUKA', emoji: '🌿' },
+  { text: 'MRAK', emoji: '☁️' },
+  { text: 'SLUNCE', emoji: '☀️' },
+  { text: 'OKNO', emoji: '🪟' },
+  { text: 'DVEŘE', emoji: '🚪' },
+  { text: 'STŮL', emoji: '🪑' },
+  { text: 'ŽIDLE', emoji: '🪑' },
+  { text: 'MEDVĚD', emoji: '🐻' },
+  { text: 'ZAJÍC', emoji: '🐇' },
+  { text: 'JEŽEK', emoji: '🦔' },
+  { text: 'BÁBA', emoji: '👵' },
+  { text: 'DĚDA', emoji: '👴' },
+  { text: 'ŠKOLA', emoji: '🏫' },
+  { text: 'TUŽKA', emoji: '✏️' },
+  { text: 'SEŠIT', emoji: '📓' },
+  { text: 'KNIHA', emoji: '📖' },
+  { text: 'JABLKO', emoji: '🍎' },
+  { text: 'HRUŠKA', emoji: '🍐' },
+  { text: 'BANÁN', emoji: '🍌' },
+  { text: 'DORT', emoji: '🎂' },
+  { text: 'MLÉKO', emoji: '🥛' },
+  { text: 'ROHLÍK', emoji: '🥐' },
 ];
+
+const getAllowedWords = () => {
+  const allowed = WORDS.filter(w => isContentAllowed(w.text));
+  return allowed.length > 0 ? allowed : WORDS;
+};
 
 export function WordsGame() {
   const [currentWord, setCurrentWord] = useState(null);
@@ -48,13 +77,14 @@ export function WordsGame() {
   }, [gameMode]);
 
   const startNewRound = () => {
-    const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+    const currentWords = getAllowedWords();
+    const randomWord = currentWords[Math.floor(Math.random() * currentWords.length)];
     setCurrentWord(randomWord);
 
     // Generate 3 wrong options
     const wrongOptions = [];
     while (wrongOptions.length < 3) {
-      const randomOption = WORDS[Math.floor(Math.random() * WORDS.length)];
+      const randomOption = currentWords[Math.floor(Math.random() * currentWords.length)];
       // Ensure unique options and not the correct answer
       if (randomOption.text !== randomWord.text && !wrongOptions.some(o => o.text === randomOption.text)) {
         wrongOptions.push(randomOption);

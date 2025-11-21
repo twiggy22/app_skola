@@ -14,6 +14,15 @@ const SENTENCES = [
   { part1: 'To je moje', part2: '.', correct: 'KOLO', wrong: ['SELE', 'OKNO'] },
   { part1: 'Pes má', part2: '.', correct: 'UCHO', wrong: ['AUTO', 'KOLO'] },
   { part1: 'Máme doma', part2: '.', correct: 'SŮL', wrong: ['LES', 'SELE'] },
+  { part1: 'Na poli je', part2: '.', correct: 'ZAJÍC', wrong: ['AUTO', 'KOLO'] },
+  { part1: 'V lese roste', part2: '.', correct: 'STROM', wrong: ['DŮM', 'MÍČ'] },
+  { part1: 'Na nebi svítí', part2: '.', correct: 'SLUNCE', wrong: ['POLE', 'VODA'] },
+  { part1: 'Ve škole je', part2: '.', correct: 'TABULE', wrong: ['LES', 'AUTO'] },
+  { part1: 'Babička peče', part2: '.', correct: 'DORT', wrong: ['KOLO', 'STŮL'] },
+  { part1: 'Děda čte', part2: '.', correct: 'KNIHU', wrong: ['OKNO', 'DVEŘE'] },
+  { part1: 'Kočka pije', part2: '.', correct: 'MLÉKO', wrong: ['SŮL', 'LES'] },
+  { part1: 'Pes hlídá', part2: '.', correct: 'DŮM', wrong: ['MRAK', 'KVĚT'] },
+  { part1: 'Na louce je', part2: '.', correct: 'KVĚT', wrong: ['AUTO', 'DŮM'] },
 ];
 
 export function SentenceGame() {
@@ -140,45 +149,32 @@ export function SentenceGame() {
       )}
 
       {/* Save Score Section */}
-      <div className="max-w-md mx-auto mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-orange-100 w-full">
-        <div className="flex items-center gap-3 mb-4 text-orange-800">
-          <Trophy className="w-6 h-6 text-orange-500" />
-          <h3 className="text-xl font-bold">Uložit skóre</h3>
-        </div>
-        
-        {scoreSaved ? (
-          <div className="text-center py-4 text-green-600 font-bold text-lg animate-in fade-in">
-            Skóre uloženo! 🎉
-          </div>
-        ) : (
-          <form onSubmit={handleSaveScore} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-orange-700 mb-1">
-                Tvé jméno
-              </label>
+      <div className="mt-12 w-full max-w-md mx-auto">
+        {!scoreSaved ? (
+          <div className="bg-blue-50 p-4 rounded-xl border-2 border-blue-100 flex flex-col items-center gap-3">
+            <span className="text-blue-800 font-bold">Uložit výsledek</span>
+            <form onSubmit={handleSaveScore} className="flex gap-2 w-full justify-center">
               <input
                 type="text"
+                placeholder="Tvé jméno"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Zadej jméno..."
-                className="w-full px-4 py-2 rounded-xl border-2 border-orange-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
-                maxLength={20}
-                required
+                className="px-4 py-2 border-2 border-blue-200 rounded-xl focus:border-blue-400 outline-none w-full max-w-[200px]"
+                maxLength={15}
               />
-            </div>
-            <button
-              type="submit"
-              disabled={isSaving || !playerName.trim()}
-              className="w-full py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {isSaving ? (
-                <RefreshCw className="w-5 h-5 animate-spin" />
-              ) : (
-                <Save className="w-5 h-5" />
-              )}
-              Uložit výsledek
-            </button>
-          </form>
+              <button 
+                type="submit" 
+                disabled={isSaving || !playerName.trim() || score === 0}
+                className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold flex items-center gap-2"
+              >
+                <Save size={20} /> Uložit
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="bg-green-50 p-4 rounded-xl border-2 border-green-100 text-center text-green-700 font-bold animate-in fade-in">
+            Výsledek uložen! 🎉
+          </div>
         )}
       </div>
 

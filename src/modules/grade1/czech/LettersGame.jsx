@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown, Save, Trophy } from 'l
 import confetti from 'canvas-confetti';
 import { saveScore } from '../../../services/scoreService';
 import { Leaderboard } from '../../../components/Leaderboard';
+import { GameConfig, isContentAllowed } from '../../../config';
 
 const ALPHABET_PAIRS = [
   { upper: 'A', lower: 'a' },
@@ -32,7 +33,28 @@ const ALPHABET_PAIRS = [
   { upper: 'X', lower: 'x' },
   { upper: 'Y', lower: 'y' },
   { upper: 'Z', lower: 'z' },
+  // Czech special characters
+  { upper: 'Á', lower: 'á' },
+  { upper: 'Č', lower: 'č' },
+  { upper: 'Ď', lower: 'ď' },
+  { upper: 'É', lower: 'é' },
+  { upper: 'Ě', lower: 'ě' },
+  { upper: 'Í', lower: 'í' },
+  { upper: 'Ň', lower: 'ň' },
+  { upper: 'Ó', lower: 'ó' },
+  { upper: 'Ř', lower: 'ř' },
+  { upper: 'Š', lower: 'š' },
+  { upper: 'Ť', lower: 'ť' },
+  { upper: 'Ú', lower: 'ú' },
+  { upper: 'Ů', lower: 'ů' },
+  { upper: 'Ý', lower: 'ý' },
+  { upper: 'Ž', lower: 'ž' },
 ];
+
+// Filter pairs based on config
+const getAllowedPairs = () => {
+  return ALPHABET_PAIRS.filter(pair => isContentAllowed(pair.upper));
+};
 
 export function LettersGame() {
   const [currentPair, setCurrentPair] = useState(null);
@@ -50,14 +72,18 @@ export function LettersGame() {
   }, [gameMode]);
 
   const startNewRound = () => {
-    const randomPair = ALPHABET_PAIRS[Math.floor(Math.random() * ALPHABET_PAIRS.length)];
+    const allowedPairs = getAllowedPairs();
+    const sourcePairs = allowedPairs.length > 0 ? allowedPairs : ALPHABET_PAIRS;
+
+    const randomPair = sourcePairs[Math.floor(Math.random() * sourcePairs.length)];
     setCurrentPair(randomPair);
 
     // Generate 3 wrong options
     const wrongOptions = [];
     while (wrongOptions.length < 3) {
-      const randomOption = ALPHABET_PAIRS[Math.floor(Math.random() * ALPHABET_PAIRS.length)];
-      if (randomOption.upper !== randomPair.upper && !wrongOptions.includes(randomOption)) {
+      const randomOption = sourcePairs[Math.floor(Math.random() * sourcePairs.length)];
+      // Ensure unique options and not the correct answer
+      if (randomOption.upper !== randomPair.upper && !wrongOptions.some(o => o.upper === randomOption.upper)) {
         wrongOptions.push(randomOption);
       }
     }

@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Undo2, Frown, Save, Trophy } 
 import confetti from 'canvas-confetti';
 import { saveScore } from '../../../services/scoreService';
 import { Leaderboard } from '../../../components/Leaderboard';
+import { GameConfig, isContentAllowed } from '../../../config';
 
 const WORDS_DATA = [
   { word: 'AUTO', syllables: ['AU', 'TO'], emoji: '🚗' },
@@ -21,7 +22,35 @@ const WORDS_DATA = [
   { word: 'PUSA', syllables: ['PU', 'SA'], emoji: '👄' },
   { word: 'ZIMA', syllables: ['ZI', 'MA'], emoji: '❄️' },
   { word: 'VODA', syllables: ['VO', 'DA'], emoji: '💧' },
+  { word: 'POLE', syllables: ['PO', 'LE'], emoji: '🌾' },
+  { word: 'LOUKA', syllables: ['LOU', 'KA'], emoji: '🌿' },
+  { word: 'MRAK', syllables: ['MRAK'], emoji: '☁️' },
+  { word: 'SLUNCE', syllables: ['SLUN', 'CE'], emoji: '☀️' },
+  { word: 'OKNO', syllables: ['OK', 'NO'], emoji: '🪟' },
+  { word: 'DVEŘE', syllables: ['DVE', 'ŘE'], emoji: '🚪' },
+  { word: 'STŮL', syllables: ['STŮL'], emoji: '🪑' },
+  { word: 'ŽIDLE', syllables: ['ŽID', 'LE'], emoji: '🪑' },
+  { word: 'MEDVĚD', syllables: ['MED', 'VĚD'], emoji: '🐻' },
+  { word: 'ZAJÍC', syllables: ['ZA', 'JÍC'], emoji: '🐇' },
+  { word: 'JEŽEK', syllables: ['JE', 'ŽEK'], emoji: '🦔' },
+  { word: 'BÁBA', syllables: ['BÁ', 'BA'], emoji: '👵' },
+  { word: 'DĚDA', syllables: ['DĚ', 'DA'], emoji: '👴' },
+  { word: 'ŠKOLA', syllables: ['ŠKO', 'LA'], emoji: '🏫' },
+  { word: 'TUŽKA', syllables: ['TUŽ', 'KA'], emoji: '✏️' },
+  { word: 'SEŠIT', syllables: ['SE', 'ŠIT'], emoji: '📓' },
+  { word: 'KNIHA', syllables: ['KNI', 'HA'], emoji: '📖' },
+  { word: 'JABLKO', syllables: ['JA', 'BL', 'KO'], emoji: '🍎' },
+  { word: 'HRUŠKA', syllables: ['HRUŠ', 'KA'], emoji: '🍐' },
+  { word: 'BANÁN', syllables: ['BA', 'NÁN'], emoji: '🍌' },
+  { word: 'DORT', syllables: ['DORT'], emoji: '🎂' },
+  { word: 'MLÉKO', syllables: ['MLÉ', 'KO'], emoji: '🥛' },
+  { word: 'ROHLÍK', syllables: ['ROH', 'LÍK'], emoji: '🥐' },
 ];
+
+const getAllowedWords = () => {
+  const allowed = WORDS_DATA.filter(w => isContentAllowed(w.word));
+  return allowed.length > 0 ? allowed : WORDS_DATA;
+};
 
 export function WordCompositionGame() {
   const [currentWord, setCurrentWord] = useState(null);
@@ -39,7 +68,8 @@ export function WordCompositionGame() {
   }, []);
 
   const startNewRound = () => {
-    const randomWord = WORDS_DATA[Math.floor(Math.random() * WORDS_DATA.length)];
+    const currentWords = getAllowedWords();
+    const randomWord = currentWords[Math.floor(Math.random() * currentWords.length)];
     setCurrentWord(randomWord);
 
     // Prepare correct syllables
@@ -52,7 +82,7 @@ export function WordCompositionGame() {
     // Prepare distractors (2 random syllables from other words)
     const distractors = [];
     while (distractors.length < 2) {
-      const randomOtherWord = WORDS_DATA[Math.floor(Math.random() * WORDS_DATA.length)];
+      const randomOtherWord = currentWords[Math.floor(Math.random() * currentWords.length)];
       const randomSyllable = randomOtherWord.syllables[Math.floor(Math.random() * randomOtherWord.syllables.length)];
       
       // Avoid duplicates in distractors and avoid correct syllables
@@ -221,45 +251,32 @@ export function WordCompositionGame() {
       )}
 
       {/* Save Score Section */}
-      <div className="max-w-md mx-auto mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-orange-100">
-        <div className="flex items-center gap-3 mb-4 text-orange-800">
-          <Trophy className="w-6 h-6 text-orange-500" />
-          <h3 className="text-xl font-bold">Uložit skóre</h3>
-        </div>
-        
-        {scoreSaved ? (
-          <div className="text-center py-4 text-green-600 font-bold text-lg animate-in fade-in">
-            Skóre uloženo! 🎉
-          </div>
-        ) : (
-          <form onSubmit={handleSaveScore} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-orange-700 mb-1">
-                Tvé jméno
-              </label>
+      <div className="mt-12 w-full max-w-md mx-auto">
+        {!scoreSaved ? (
+          <div className="bg-blue-50 p-4 rounded-xl border-2 border-blue-100 flex flex-col items-center gap-3">
+            <span className="text-blue-800 font-bold">Uložit výsledek</span>
+            <form onSubmit={handleSaveScore} className="flex gap-2 w-full justify-center">
               <input
                 type="text"
+                placeholder="Tvé jméno"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Zadej jméno..."
-                className="w-full px-4 py-2 rounded-xl border-2 border-orange-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
-                maxLength={20}
-                required
+                className="px-4 py-2 border-2 border-blue-200 rounded-xl focus:border-blue-400 outline-none w-full max-w-[200px]"
+                maxLength={15}
               />
-            </div>
-            <button
-              type="submit"
-              disabled={isSaving || !playerName.trim()}
-              className="w-full py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {isSaving ? (
-                <RefreshCw className="w-5 h-5 animate-spin" />
-              ) : (
-                <Save className="w-5 h-5" />
-              )}
-              Uložit výsledek
-            </button>
-          </form>
+              <button 
+                type="submit" 
+                disabled={isSaving || !playerName.trim() || score === 0}
+                className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold flex items-center gap-2"
+              >
+                <Save size={20} /> Uložit
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="bg-green-50 p-4 rounded-xl border-2 border-green-100 text-center text-green-700 font-bold animate-in fade-in">
+            Výsledek uložen! 🎉
+          </div>
         )}
       </div>
 

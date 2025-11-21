@@ -4,21 +4,36 @@ import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown, Save, Trophy } from 'l
 import confetti from 'canvas-confetti';
 import { saveScore } from '../../../services/scoreService';
 import { Leaderboard } from '../../../components/Leaderboard';
+import { GameConfig, isContentAllowed } from '../../../config';
 
 const CONSONANTS = ['M', 'L', 'S', 'P', 'T', 'J', 'N', 'V', 'Z', 'D', 'K'];
 const VOWELS = ['A', 'E', 'I', 'O', 'U', 'Y', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ý'];
 
 const generateSyllables = () => {
   const syllables = [];
-  CONSONANTS.forEach(c => {
-    VOWELS.forEach(v => {
+  
+  // Filter based on config
+  const allowedConsonants = CONSONANTS.filter(c => isContentAllowed(c));
+  const allowedVowels = VOWELS.filter(v => isContentAllowed(v));
+
+  // Fallback if nothing allowed (prevent empty game)
+  const activeConsonants = allowedConsonants.length > 0 ? allowedConsonants : CONSONANTS;
+  const activeVowels = allowedVowels.length > 0 ? allowedVowels : VOWELS;
+
+  activeConsonants.forEach(c => {
+    activeVowels.forEach(v => {
       syllables.push({ upper: c + v, lower: c.toLowerCase() + v.toLowerCase() });
     });
   });
   return syllables;
 };
 
-const SYLLABLES = generateSyllables();
+// We need to regenerate syllables when component mounts or config changes, 
+// but since config is static for now, we can just call it. 
+// Ideally this should be inside the component or memoized if config was dynamic at runtime.
+// For this simple app, we can keep it global but we need to make sure it uses the updated config.
+// Since `isContentAllowed` reads from `GameConfig` which is imported, it should be fine.
+const getSyllables = () => generateSyllables();
 
 export function SyllablesGame() {
   const [currentPair, setCurrentPair] = useState(null);
@@ -36,13 +51,14 @@ export function SyllablesGame() {
   }, [gameMode]);
 
   const startNewRound = () => {
-    const randomPair = SYLLABLES[Math.floor(Math.random() * SYLLABLES.length)];
+    const currentSyllables = getSyllables();
+    const randomPair = currentSyllables[Math.floor(Math.random() * currentSyllables.length)];
     setCurrentPair(randomPair);
 
     // Generate 3 wrong options
     const wrongOptions = [];
     while (wrongOptions.length < 3) {
-      const randomOption = SYLLABLES[Math.floor(Math.random() * SYLLABLES.length)];
+      const randomOption = currentSyllables[Math.floor(Math.random() * currentSyllables.length)];
       // Ensure unique options and not the correct answer
       if (randomOption.upper !== randomPair.upper && !wrongOptions.some(o => o.upper === randomOption.upper)) {
         wrongOptions.push(randomOption);
