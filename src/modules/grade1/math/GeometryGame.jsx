@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { ArrowLeft, RefreshCw, Lightbulb, X, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -36,6 +36,17 @@ export function GeometryGame() {
   const [targetShape, setTargetShape] = useState(null);
   const [foundCount, setFoundCount] = useState(0);
   const [totalTargetCount, setTotalTargetCount] = useState(0);
+  
+  // Dragging state
+  const containerRef = useRef(null);
+  const [dragState, setDragState] = useState({
+    itemId: null,
+    startX: 0,
+    startY: 0,
+    initialItemX: 0,
+    initialItemY: 0,
+    hasMoved: false
+  });
 
   const generateGame = () => {
     // Pick a target shape
@@ -82,6 +93,89 @@ export function GeometryGame() {
   useEffect(() => {
     generateGame();
   }, []);
+
+  // Drag handlers
+  const handlePointerDown = (e, item) => {
+    if (item.isFound) return;
+    e.preventDefault(); // Prevent scrolling on touch
+    e.stopPropagation();
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    setDragState({
+      itemId: item.id,
+      startX: clientX,
+      startY: clientY,
+      initialItemX: item.x,
+      initialItemY: item.y,
+      hasMoved: false
+    });
+  };
+
+  useEffect(() => {
+    const handlePointerMove = (e) => {
+      if (dragState.itemId === null || !containerRef.current) return;
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      const deltaXPixels = clientX - dragState.startX;
+      const deltaYPixels = clientY - dragState.startY;
+
+      // Check if moved enough to consider it a drag
+      if (!dragState.hasMoved && (Math.abs(deltaXPixels) > 5 || Math.abs(deltaYPixels) > 5)) {
+        setDragState(prev => ({ ...prev, hasMoved: true }));
+      }
+
+      // Convert pixels to percentage
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const deltaXPercent = (deltaXPixels / containerRect.width) * 100;
+      const deltaYPercent = (deltaYPixels / containerRect.height) * 100;
+
+      const newX = Math.max(0, Math.min(85, dragState.initialItemX + deltaXPercent));
+      const newY = Math.max(0, Math.min(85, dragState.initialItemY + deltaYPercent));
+
+      setGameItems(prev => prev.map(item => 
+        item.id === dragState.itemId 
+          ? { ...item, x: newX, y: newY } 
+          : item
+      ));
+    };
+
+    const handlePointerUp = (e) => {
+      if (dragState.itemId === null) return;
+
+      if (!dragState.hasMoved) {
+        // It was a click
+        const item = gameItems.find(i => i.id === dragState.itemId);
+        if (item) handleItemClick(item);
+      }
+
+      setDragState({
+        itemId: null,
+        startX: 0,
+        startY: 0,
+        initialItemX: 0,
+        initialItemY: 0,
+        hasMoved: false
+      });
+    };
+
+    if (dragState.itemId !== null) {
+      window.addEventListener('pointermove', handlePointerMove);
+      window.addEventListener('pointerup', handlePointerUp);
+      window.addEventListener('touchmove', handlePointerMove, { passive: false });
+      window.addEventListener('touchend', handlePointerUp);
+    }
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('touchmove', handlePointerMove);
+      window.removeEventListener('touchend', handlePointerUp);
+    };
+  }, [dragState, gameItems]);
 
   const handleItemClick = (item) => {
     if (item.isFound) return;
@@ -178,7 +272,10 @@ export function GeometryGame() {
       </div>
 
       {/* Game Area */}
-      <div className="relative w-full max-w-2xl h-[400px] bg-white rounded-3xl shadow-xl border-4 border-pink-100 overflow-hidden">
+      <div 
+        ref={containerRef}
+        className="relative w-full max-w-2xl h-[400px] bg-white rounded-3xl shadow-xl border-4 border-pink-100 overflow-hidden touch-none"
+      >
         {foundCount === totalTargetCount ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 z-10 animate-in fade-in duration-500">
             <h2 className="text-4xl font-bold text-green-600 mb-4">Výborně! 🎉</h2>
@@ -193,10 +290,11 @@ export function GeometryGame() {
           gameItems.map((item) => (
             <div
               key={item.id}
-              onClick={() => handleItemClick(item)}
-              className={`absolute cursor-pointer transition-all duration-300 hover:scale-110 hover:z-10
-                ${item.isFound ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}
+              onPointerDown={(e) => handlePointerDown(e, item)}
+              className={`absolute cursor-grab active:cursor-grabbing hover:z-10
+                ${item.isFound ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}
                 ${item.isWrong ? 'animate-shake' : ''}
+                ${dragState.itemId === item.id ? 'z-50 scale-110 transition-none' : 'transition-all duration-300 hover:scale-110'}
               `}
               style={{
                 left: `${item.x}%`,
@@ -205,7 +303,7 @@ export function GeometryGame() {
               }}
             >
               <div 
-                className={`w-16 h-16 shadow-md ${
+                className={`w-16 h-16 shadow-md pointer-events-none ${
                   item.shapeId === 'triangle' 
                     ? 'w-0 h-0 border-l-[32px] border-l-transparent border-r-[32px] border-r-transparent border-b-[64px] border-b-current bg-transparent shadow-none' 
                     : item.shapeId === 'rectangle'
