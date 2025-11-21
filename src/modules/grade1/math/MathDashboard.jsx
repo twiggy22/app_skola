@@ -70,6 +70,20 @@ export function MathDashboard() {
           <h3 className="text-xl font-bold text-gray-800">Tvary</h3>
           <p className="text-gray-500 text-sm">Poznávání tvarů</p>
         </Link>
+
+        {/* Clock Game */}
+        <Link to="clock" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-blue-900 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
+          <div className="text-6xl mb-2">⏰</div>
+          <h3 className="text-xl font-bold text-gray-800">Hodiny</h3>
+          <p className="text-gray-500 text-sm">Kolik je hodin?</p>
+        </Link>
+
+        {/* Money Game */}
+        <Link to="money" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-yellow-400 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
+          <div className="text-6xl mb-2">💰</div>
+          <h3 className="text-xl font-bold text-gray-800">Peníze</h3>
+          <p className="text-gray-500 text-sm">Nakupování v obchodě</p>
+        </Link>
       </div>
     </div>
   );

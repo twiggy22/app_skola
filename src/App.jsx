@@ -11,6 +11,8 @@ import { MemoryGame } from './modules/grade1/math/MemoryGame';
 import { DecompositionGame } from './modules/grade1/math/DecompositionGame';
 import { NumberLineGame } from './modules/grade1/math/NumberLineGame';
 import { GeometryGame } from './modules/grade1/math/GeometryGame';
+import { ClockGame } from './modules/grade1/math/ClockGame';
+import { MoneyGame } from './modules/grade1/math/MoneyGame';
 import { GameConfig } from './config';
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
           <Route path="grade1/math/decomposition" element={<DecompositionGame maxNumber={GameConfig.maxNumber} />} />
           <Route path="grade1/math/number-line" element={<NumberLineGame maxNumber={GameConfig.maxNumber} />} />
           <Route path="grade1/math/geometry" element={<GeometryGame />} />
+          <Route path="grade1/math/clock" element={<ClockGame />} />
+          <Route path="grade1/math/money" element={<MoneyGame />} />
         </Route>
       </Routes>
     </BrowserRouter>
