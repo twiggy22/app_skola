@@ -161,12 +161,13 @@ export function NumberLineGame({ maxNumber = 20 }) {
       </div>
 
       {/* The Number Line */}
-      <div className="relative w-full flex items-center justify-between gap-2 mb-20 px-4 py-12 bg-teal-50 rounded-3xl shadow-inner">
-        {/* Line background */}
-        <div className="absolute left-4 right-4 top-1/2 h-2 bg-teal-200 -z-0 rounded-full"></div>
+      <div className="w-full overflow-x-auto mb-20 bg-teal-50 rounded-3xl shadow-inner">
+        <div className="relative min-w-[600px] flex items-center justify-between gap-2 px-4 py-12">
+          {/* Line background */}
+          <div className="absolute left-4 right-4 top-1/2 h-2 bg-teal-200 -z-0 rounded-full"></div>
 
-        {sequence.map((item, index) => (
-          <div key={index} className="relative z-10 flex flex-col items-center">
+          {sequence.map((item, index) => (
+            <div key={index} className="relative z-10 flex flex-col items-center flex-shrink-0">
             {/* Tick mark */}
             <div className="w-1 h-4 bg-teal-400 mb-2"></div>
             
@@ -194,6 +195,7 @@ export function NumberLineGame({ maxNumber = 20 }) {
             )}
           </div>
         ))}
+        </div>
       </div>
 
       {/* Draggable Options */}

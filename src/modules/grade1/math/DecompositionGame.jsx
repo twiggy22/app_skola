@@ -89,13 +89,13 @@ export function DecompositionGame({ maxNumber = 20 }) {
 
   return (
     <div className="p-6 max-w-4xl mx-auto flex flex-col items-center">
-      <div className="w-full flex items-center justify-between mb-8">
-        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
+        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors justify-self-start sm:order-1">
           <ArrowLeft className="w-6 h-6 mr-2" />
           Zpět
         </Link>
-        <h1 className="text-3xl font-bold text-orange-600">Rozklad čísel (Domečky)</h1>
-        <div className="flex gap-4 items-center">
+        
+        <div className="flex gap-4 items-center justify-self-end sm:order-3">
           <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
             <Star fill="currentColor" /> {score}
           </div>
@@ -114,6 +114,8 @@ export function DecompositionGame({ maxNumber = 20 }) {
             <RefreshCw className="w-6 h-6 text-gray-600" />
           </button>
         </div>
+
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-orange-600 text-center sm:order-2">Rozklad čísel (Domečky)</h1>
       </div>
 
       {/* House Container */}

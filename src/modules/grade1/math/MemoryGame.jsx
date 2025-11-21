@@ -120,13 +120,13 @@ export function MemoryGame({ maxNumber = 20 }) {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
-        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
+        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors justify-self-start sm:order-1">
           <ArrowLeft className="w-6 h-6 mr-2" />
           Zpět
         </Link>
-        <h1 className="text-3xl font-bold text-purple-600">Matematické Pexeso</h1>
-        <div className="flex gap-2 items-center">
+        
+        <div className="flex gap-2 items-center justify-self-end sm:order-3">
           <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl mr-4">
             <Star fill="currentColor" /> {score}
           </div>
@@ -145,6 +145,8 @@ export function MemoryGame({ maxNumber = 20 }) {
             <RefreshCw className="w-6 h-6 text-gray-600" />
           </button>
         </div>
+
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-purple-600 text-center sm:order-2">Matematické Pexeso</h1>
       </div>
 
       <div className="flex justify-between mb-4 text-xl font-semibold text-gray-700">
