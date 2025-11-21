@@ -42,6 +42,13 @@ export function MathDashboard() {
           <h3 className="text-xl font-bold text-gray-800">Porovnávání</h3>
           <p className="text-gray-500 text-sm">Větší nebo menší?</p>
         </Link>
+
+        {/* Memory Game */}
+        <Link to="memory" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-indigo-200 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
+          <div className="text-6xl mb-2">🎴</div>
+          <h3 className="text-xl font-bold text-gray-800">Pexeso</h3>
+          <p className="text-gray-500 text-sm">Najdi příklad a výsledek</p>
+        </Link>
       </div>
     </div>
   );
