@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { Leaderboard } from '../../../components/Leaderboard';
 
 export function CzechDashboard() {
   return (
@@ -48,6 +49,12 @@ export function CzechDashboard() {
           <h3 className="text-xl font-bold text-gray-800">Doplňovačka</h3>
           <p className="text-gray-500 text-sm">Doplň slovo do věty</p>
         </Link>
+      </div>
+
+      {/* Leaderboard Section */}
+      <div className="flex flex-col items-center gap-8 border-t-2 border-gray-100 pt-12 mb-12">
+        <h3 className="text-2xl font-bold text-gray-400 uppercase tracking-widest">Celkový žebříček</h3>
+        <Leaderboard gameId="global-czech" title="Mistři češtiny" />
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Lightbulb, X, Star, Frown } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lightbulb, X, Star, Frown, Save, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { saveScore } from '../../../services/scoreService';
+import { Leaderboard } from '../../../components/Leaderboard';
 
 const SHAPES = [
   { id: 'circle', name: 'kruh', label: 'kruhy', css: 'rounded-full' },
@@ -37,6 +39,9 @@ export function GeometryGame() {
   const [foundCount, setFoundCount] = useState(0);
   const [totalTargetCount, setTotalTargetCount] = useState(0);
   const [message, setMessage] = useState('');
+  const [playerName, setPlayerName] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [scoreSaved, setScoreSaved] = useState(false);
   
   // Dragging state
   const containerRef = useRef(null);
@@ -215,6 +220,20 @@ export function GeometryGame() {
     }
   };
 
+  const handleSaveScore = async (e) => {
+    e.preventDefault();
+    if (!playerName.trim()) return;
+
+    setIsSaving(true);
+    const success = await saveScore(playerName, 'math-geometry', score);
+    setIsSaving(false);
+    
+    if (success) {
+      setScoreSaved(true);
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    }
+  };
+
   return (
     <div className="p-6 max-w-4xl mx-auto flex flex-col items-center min-h-screen">
       <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
@@ -332,6 +351,41 @@ export function GeometryGame() {
           {!message.includes('Správně') && <Frown className="inline-block" />}
         </div>
       )}
+
+      {/* Save Score Section */}
+      <div className="mt-12 w-full max-w-md">
+        {!scoreSaved ? (
+          <div className="bg-blue-50 p-4 rounded-xl border-2 border-blue-100 flex flex-col items-center gap-3">
+            <span className="text-blue-800 font-bold">Uložit výsledek</span>
+            <form onSubmit={handleSaveScore} className="flex gap-2 w-full justify-center">
+              <input
+                type="text"
+                placeholder="Tvé jméno"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                className="px-4 py-2 border-2 border-blue-200 rounded-xl focus:border-blue-400 outline-none w-full max-w-[200px]"
+                maxLength={15}
+              />
+              <button 
+                type="submit" 
+                disabled={isSaving || !playerName.trim() || score === 0}
+                className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold flex items-center gap-2"
+              >
+                <Save size={20} /> Uložit
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="bg-green-50 p-4 rounded-xl border-2 border-green-100 flex items-center justify-center gap-2 text-green-700 font-bold animate-in fade-in">
+            <Trophy size={24} /> Výsledek uložen!
+          </div>
+        )}
+      </div>
+
+      {/* Local Leaderboard */}
+      <div className="mt-12 w-full max-w-md">
+        <Leaderboard gameId="math-geometry" title="Mistři geometrie" limit={3} />
+      </div>
 
       {/* Help Modal */}
       {showHelp && (

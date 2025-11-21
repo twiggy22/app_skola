@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown, Save, Trophy } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { saveScore } from '../../../services/scoreService';
+import { Leaderboard } from '../../../components/Leaderboard';
 
 const SENTENCES = [
   { part1: 'Máma vaří', part2: '.', correct: 'MASO', wrong: ['KOLO', 'AUTO'] },
@@ -21,6 +23,9 @@ export function SentenceGame() {
   const [message, setMessage] = useState('');
   const [showHelp, setShowHelp] = useState(false);
   const [filledWord, setFilledWord] = useState(null);
+  const [playerName, setPlayerName] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [scoreSaved, setScoreSaved] = useState(false);
 
   useEffect(() => {
     startNewRound();
@@ -35,6 +40,20 @@ export function SentenceGame() {
     const allOptions = [randomSentence.correct, ...randomSentence.wrong].sort(() => Math.random() - 0.5);
     setOptions(allOptions);
     setMessage('');
+  };
+
+  const handleSaveScore = async (e) => {
+    e.preventDefault();
+    if (!playerName.trim()) return;
+
+    setIsSaving(true);
+    const success = await saveScore(playerName, 'czech-sentences', score);
+    setIsSaving(false);
+    
+    if (success) {
+      setScoreSaved(true);
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    }
   };
 
   const handleOptionClick = (selectedWord) => {
@@ -119,6 +138,54 @@ export function SentenceGame() {
           {!message.includes('Správně') && <Frown className="inline-block" />}
         </div>
       )}
+
+      {/* Save Score Section */}
+      <div className="max-w-md mx-auto mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-orange-100 w-full">
+        <div className="flex items-center gap-3 mb-4 text-orange-800">
+          <Trophy className="w-6 h-6 text-orange-500" />
+          <h3 className="text-xl font-bold">Uložit skóre</h3>
+        </div>
+        
+        {scoreSaved ? (
+          <div className="text-center py-4 text-green-600 font-bold text-lg animate-in fade-in">
+            Skóre uloženo! 🎉
+          </div>
+        ) : (
+          <form onSubmit={handleSaveScore} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-orange-700 mb-1">
+                Tvé jméno
+              </label>
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                placeholder="Zadej jméno..."
+                className="w-full px-4 py-2 rounded-xl border-2 border-orange-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                maxLength={20}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isSaving || !playerName.trim()}
+              className="w-full py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {isSaving ? (
+                <RefreshCw className="w-5 h-5 animate-spin" />
+              ) : (
+                <Save className="w-5 h-5" />
+              )}
+              Uložit výsledek
+            </button>
+          </form>
+        )}
+      </div>
+
+      {/* Leaderboard Section */}
+      <div className="max-w-md mx-auto mt-8 w-full">
+        <Leaderboard gameId="czech-sentences" />
+      </div>
 
       {/* Help Modal */}
       {showHelp && (

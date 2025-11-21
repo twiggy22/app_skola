@@ -32,6 +32,16 @@ This project is a React application for primary school education ("Škola Hrou")
 1.  **LettersGame**: Matching uppercase and lowercase letters.
 2.  **SyllablesGame**: Matching uppercase and lowercase syllables.
 3.  **WordsGame**: Matching words to images (and vice versa).
+4.  **WordCompositionGame**: Composing words from syllables.
+5.  **SentenceGame**: Completing sentences with correct words.
+
+## Gamification System
+- **Service**: `src/services/scoreService.js` handles all Firestore interactions.
+- **Database**: **Firebase Firestore** (Config: `src/firebase.js`, Project: `app-skola`).
+- **Leaderboards**:
+  - **Global**: `global-math` and `global-czech`.
+  - **Local**: Each game has a unique ID (e.g., `math-addition`, `czech-letters`).
+- **Components**: `Leaderboard.jsx` is a reusable component for displaying scores.
 
 ## Design Guidelines
 - **Mobile First**: All games must be responsive.

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Star, Lightbulb, X, Frown, Save, Trophy } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { saveScore } from '../../../services/scoreService';
+import { Leaderboard } from '../../../components/Leaderboard';
 
 const WORDS = [
   { text: 'PES', emoji: '🐶' },
@@ -37,6 +39,9 @@ export function WordsGame() {
   const [message, setMessage] = useState('');
   const [gameMode, setGameMode] = useState('word-to-image'); // 'word-to-image' | 'image-to-word'
   const [showHelp, setShowHelp] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [scoreSaved, setScoreSaved] = useState(false);
 
   useEffect(() => {
     startNewRound();
@@ -86,6 +91,20 @@ export function WordsGame() {
     setGameMode(prev => prev === 'word-to-image' ? 'image-to-word' : 'word-to-image');
     setScore(0);
     startNewRound();
+  };
+
+  const handleSaveScore = async (e) => {
+    e.preventDefault();
+    if (!playerName.trim()) return;
+
+    setIsSaving(true);
+    const success = await saveScore(playerName, 'czech-words', score);
+    setIsSaving(false);
+    
+    if (success) {
+      setScoreSaved(true);
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    }
   };
 
   if (!currentWord) return null;
@@ -160,6 +179,41 @@ export function WordsGame() {
           {!message.includes('Správně') && <Frown className="inline-block" />}
         </div>
       )}
+
+      {/* Save Score Section */}
+      <div className="mt-12 w-full max-w-md mx-auto">
+        {!scoreSaved ? (
+          <div className="bg-blue-50 p-4 rounded-xl border-2 border-blue-100 flex flex-col items-center gap-3">
+            <span className="text-blue-800 font-bold">Uložit výsledek</span>
+            <form onSubmit={handleSaveScore} className="flex gap-2 w-full justify-center">
+              <input
+                type="text"
+                placeholder="Tvé jméno"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                className="px-4 py-2 border-2 border-blue-200 rounded-xl focus:border-blue-400 outline-none w-full max-w-[200px]"
+                maxLength={15}
+              />
+              <button 
+                type="submit" 
+                disabled={isSaving || !playerName.trim() || score === 0}
+                className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold flex items-center gap-2"
+              >
+                <Save size={20} /> Uložit
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="bg-green-50 p-4 rounded-xl border-2 border-green-100 flex items-center justify-center gap-2 text-green-700 font-bold animate-in fade-in">
+            <Trophy size={24} /> Výsledek uložen!
+          </div>
+        )}
+      </div>
+
+      {/* Local Leaderboard */}
+      <div className="mt-12 w-full max-w-md mx-auto">
+        <Leaderboard gameId="czech-words" title="Mistři slovíček" limit={3} />
+      </div>
 
       {/* Help Modal */}
       {showHelp && (

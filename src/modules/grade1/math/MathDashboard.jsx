@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { GameConfig } from '../../../config';
+import { Leaderboard } from '../../../components/Leaderboard';
 
 export function MathDashboard() {
   return (
-    <div className="text-center max-w-4xl mx-auto">
+    <div className="text-center max-w-6xl mx-auto p-4">
       <div className="flex justify-start mb-8">
         <Link to="/" className="text-blue-500 hover:text-blue-700 flex items-center gap-2">
           <ArrowLeft /> Zpět na hlavní stranu
@@ -14,7 +15,8 @@ export function MathDashboard() {
 
       <h2 className="text-4xl font-bold text-green-700 mb-12">Matematika - 1. Třída</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
+      {/* Games Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center mb-16">
         {/* Counting */}
         <Link to="counting" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-green-200 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
           <div className="text-6xl mb-2">🍎</div>
@@ -79,11 +81,17 @@ export function MathDashboard() {
         </Link>
 
         {/* Money Game */}
-        <Link to="money" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-yellow-400 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
+        <Link to="money" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-yellow-200 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
           <div className="text-6xl mb-2">💰</div>
           <h3 className="text-xl font-bold text-gray-800">Peníze</h3>
-          <p className="text-gray-500 text-sm">Nakupování v obchodě</p>
+          <p className="text-gray-500 text-sm">Nakupování s mincemi</p>
         </Link>
+      </div>
+
+      {/* Leaderboard Section */}
+      <div className="flex flex-col items-center gap-8 border-t-2 border-gray-100 pt-12">
+        <h3 className="text-2xl font-bold text-gray-400 uppercase tracking-widest">Celkový žebříček</h3>
+        <Leaderboard gameId="global-math" title="Nejpilnější počtáři" />
       </div>
     </div>
   );

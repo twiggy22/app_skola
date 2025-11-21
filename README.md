@@ -20,6 +20,15 @@ Interaktivní výuková aplikace pro děti na prvním stupni ZŠ.
 - 🅰️ **Písmenka**: Přiřazování velkých a malých písmen.
 - 🗣️ **Slabiky**: Čtení a párování slabik (MA - ma).
 - 📖 **Slova**: Čtení slov s obrázky (PES - 🐶).
+- 🧩 **Skládání**: Skládání slov ze slabik (AU-TO).
+- ✏️ **Doplňovačka**: Doplňování slov do vět.
+
+### Gamifikace 🏆
+- **Ukládání skóre**: Hráči si mohou uložit své výsledky pod svým jménem.
+- **Žebříčky**:
+  - **Lokální**: Pro každou hru zvlášť.
+  - **Globální**: Celkový žebříček pro Matematiku a Češtinu ("Mistři").
+- **Databáze**: Data jsou ukládána do **Firebase Firestore**.
 
 ### Další funkce
 - 🎉 **Odměny**: Vizuální efekty (konfety) za správné odpovědi.
@@ -38,6 +47,9 @@ Obtížnost her lze snadno upravit v souboru `src/config.js`.
 - **React Router** - Navigace
 - **Canvas Confetti** - Efekty
 - **Lucide React** - Ikony
+- **Firebase** - Backend (Firestore Database)
+  - Konfigurace: `src/firebase.js`
+  - Projekt ID: `app-skola`
 
 ## Jak spustit projekt
 
