@@ -2,20 +2,12 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Layout } from './layouts/Layout';
 import { Home } from './components/Home';
+import { MathDashboard } from './modules/grade1/math/MathDashboard';
 import { CountingGame } from './modules/grade1/math/CountingGame';
-
-const MathDashboard = () => (
-  <div className="text-center">
-    <h2 className="text-3xl font-bold text-green-700 mb-8">Matematika - 1. Třída</h2>
-    <div className="flex justify-center gap-6">
-      <Link to="counting" className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all border-2 border-green-100 flex flex-col items-center gap-4 w-64">
-        <div className="text-6xl">🍎</div>
-        <h3 className="text-xl font-bold text-gray-800">Počítání</h3>
-        <p className="text-gray-500">Spočítej předměty</p>
-      </Link>
-    </div>
-  </div>
-);
+import { AdditionGame } from './modules/grade1/math/AdditionGame';
+import { SubtractionGame } from './modules/grade1/math/SubtractionGame';
+import { ComparisonGame } from './modules/grade1/math/ComparisonGame';
+import { GameConfig } from './config';
 
 function App() {
   return (
@@ -25,6 +17,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="grade1/math" element={<MathDashboard />} />
           <Route path="grade1/math/counting" element={<CountingGame />} />
+          <Route path="grade1/math/addition" element={<AdditionGame maxNumber={GameConfig.maxNumber} />} />
+          <Route path="grade1/math/subtraction" element={<SubtractionGame maxNumber={GameConfig.maxNumber} />} />
+          <Route path="grade1/math/comparison" element={<ComparisonGame maxNumber={GameConfig.maxNumber} />} />
         </Route>
       </Routes>
     </BrowserRouter>

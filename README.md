@@ -8,6 +8,12 @@ Interaktivní výuková aplikace pro děti na prvním stupni ZŠ.
 - 📖 **Čtení**: (Plánováno)
 - 🎉 **Odměny**: Vizuální efekty (konfety) za správné odpovědi.
 
+## Konfigurace
+
+Obtížnost her lze snadno upravit v souboru `src/config.js`.
+
+- **maxNumber**: Určuje maximální číslo pro matematické operace (např. 20, 50, 100). Tato změna se automaticky projeví ve všech hrách (sčítání, odčítání, porovnávání) i v popisech na nástěnce.
+
 ## Technologie
 
 - **React** (Vite)
