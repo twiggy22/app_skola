@@ -8,6 +8,7 @@ import { AdditionGame } from './modules/grade1/math/AdditionGame';
 import { SubtractionGame } from './modules/grade1/math/SubtractionGame';
 import { ComparisonGame } from './modules/grade1/math/ComparisonGame';
 import { MemoryGame } from './modules/grade1/math/MemoryGame';
+import { DecompositionGame } from './modules/grade1/math/DecompositionGame';
 import { GameConfig } from './config';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="grade1/math/subtraction" element={<SubtractionGame maxNumber={GameConfig.maxNumber} />} />
           <Route path="grade1/math/comparison" element={<ComparisonGame maxNumber={GameConfig.maxNumber} />} />
           <Route path="grade1/math/memory" element={<MemoryGame maxNumber={GameConfig.maxNumber} />} />
+          <Route path="grade1/math/decomposition" element={<DecompositionGame maxNumber={GameConfig.maxNumber} />} />
         </Route>
       </Routes>
     </BrowserRouter>

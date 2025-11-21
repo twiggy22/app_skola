@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Star, RefreshCw } from 'lucide-react';
+import { Star, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function CountingGame() {
   const [targetNumber, setTargetNumber] = useState(0);
@@ -47,6 +48,9 @@ export function CountingGame() {
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="flex justify-between w-full max-w-md mb-8">
+        <Link to="/grade1/math" className="text-blue-500 hover:text-blue-700 flex items-center gap-2">
+          <ArrowLeft /> Zpět
+        </Link>
         <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
           <Star fill="currentColor" /> {score}
         </div>

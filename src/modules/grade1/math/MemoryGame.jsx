@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { ArrowLeft, RefreshCw, Lightbulb, X } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Lightbulb, X, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function MemoryGame({ maxNumber = 20 }) {
   const [showHelp, setShowHelp] = useState(false);
+  const [score, setScore] = useState(0);
   const [cards, setCards] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedPairs, setMatchedPairs] = useState(0);
@@ -97,6 +98,7 @@ export function MemoryGame({ maxNumber = 20 }) {
       setMatchedPairs(prev => {
         const newCount = prev + 1;
         if (newCount === 6) {
+          setScore(prevScore => prevScore + 1);
           confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
         }
         return newCount;
@@ -119,12 +121,15 @@ export function MemoryGame({ maxNumber = 20 }) {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-8">
-        <Link to="/" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
           <ArrowLeft className="w-6 h-6 mr-2" />
-          Zpět na nástěnku
+          Zpět
         </Link>
         <h1 className="text-3xl font-bold text-purple-600">Matematické Pexeso</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl mr-4">
+            <Star fill="currentColor" /> {score}
+          </div>
           <button 
             onClick={() => setShowHelp(true)}
             className="p-2 rounded-full hover:bg-yellow-100 text-yellow-600 transition-colors"
