@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCtMFODfKTXG4gycQuyfqcZlfWjTDZD5zg",
-  authDomain: "app-skola.firebaseapp.com",
-  projectId: "app-skola",
-  storageBucket: "app-skola.firebasestorage.app",
-  messagingSenderId: "415025115504",
-  appId: "1:415025115504:web:ac6bfe8ce08b2dc81a1fb5"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
