@@ -3,6 +3,10 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Layout } from './layouts/Layout';
 import { Home } from './components/Home';
 import { MathDashboard } from './modules/grade1/math/MathDashboard';
+import { CzechDashboard } from './modules/grade1/czech/CzechDashboard';
+import { LettersGame } from './modules/grade1/czech/LettersGame';
+import { SyllablesGame } from './modules/grade1/czech/SyllablesGame';
+import { WordsGame } from './modules/grade1/czech/WordsGame';
 import { CountingGame } from './modules/grade1/math/CountingGame';
 import { AdditionGame } from './modules/grade1/math/AdditionGame';
 import { SubtractionGame } from './modules/grade1/math/SubtractionGame';
@@ -32,6 +36,10 @@ function App() {
           <Route path="grade1/math/geometry" element={<GeometryGame />} />
           <Route path="grade1/math/clock" element={<ClockGame />} />
           <Route path="grade1/math/money" element={<MoneyGame />} />
+          <Route path="grade1/czech" element={<CzechDashboard />} />
+          <Route path="grade1/czech/letters" element={<LettersGame />} />
+          <Route path="grade1/czech/syllables" element={<SyllablesGame />} />
+          <Route path="grade1/czech/words" element={<WordsGame />} />
         </Route>
       </Routes>
     </BrowserRouter>

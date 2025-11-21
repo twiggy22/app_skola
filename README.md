@@ -4,9 +4,22 @@ Interaktivní výuková aplikace pro děti na prvním stupni ZŠ.
 
 ## Funkce
 
-- 🧮 **Matematika**: Počítání předmětů, sčítání (plánováno), odčítání (plánováno).
+### 1. Třída - Matematika
+- 🍎 **Počítání**: Základní počítání předmětů.
+- ➕ **Sčítání**: Sčítání do X (nastavitelné).
+- ➖ **Odčítání**: Odčítání do X.
+- ⚖️ **Porovnávání**: Větší, menší, rovná se.
+- 🎴 **Pexeso**: Hledání párů (příklad + výsledek).
+- 🏠 **Domečky**: Rozklad čísel.
+- 📏 **Číselná osa**: Řazení čísel (drag & drop).
+- 🔺 **Tvary**: Poznávání geometrických tvarů (drag & drop).
+- ⏰ **Hodiny**: Poznávání času (ručičkové i digitální).
+- 💰 **Peníze**: Nakupování a placení mincemi.
+
+### Další funkce
 - 📖 **Čtení**: (Plánováno)
 - 🎉 **Odměny**: Vizuální efekty (konfety) za správné odpovědi.
+- 📱 **Responzivní design**: Hry jsou optimalizované pro mobily i tablety.
 
 ## Konfigurace
 

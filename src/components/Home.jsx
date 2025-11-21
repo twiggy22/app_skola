@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calculator } from 'lucide-react';
+import { Calculator, BookOpen } from 'lucide-react';
 
 export function Home() {
   return (
@@ -15,12 +15,11 @@ export function Home() {
           <span className="text-green-700">1. Třída</span>
         </Link>
         
-        {/* Placeholder for Reading */}
-        <div className="bg-gray-100 border-2 border-gray-300 p-8 rounded-2xl flex flex-col items-center gap-4 w-64 opacity-60">
-          <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-2xl">📖</div>
-          <span className="text-2xl font-bold text-gray-500">Čtení</span>
-          <span className="text-gray-400">Brzy</span>
-        </div>
+        <Link to="/grade1/czech" className="bg-orange-100 hover:bg-orange-200 border-2 border-orange-400 p-8 rounded-2xl flex flex-col items-center gap-4 transition-transform hover:scale-105 w-64">
+          <BookOpen size={64} className="text-orange-600" />
+          <span className="text-2xl font-bold text-orange-800">Čeština</span>
+          <span className="text-orange-700">1. Třída</span>
+        </Link>
       </div>
     </div>
   );
