@@ -68,16 +68,29 @@ export function AdditionGame({ maxNumber = 20 }) {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 max-w-2xl mx-auto">
-      <div className="flex justify-between w-full mb-8">
-        <Link to="/grade1/math" className="text-blue-500 hover:text-blue-700 flex items-center gap-2">
-          <ArrowLeft /> Zpět
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
+        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors justify-self-start sm:order-1">
+          <ArrowLeft className="w-6 h-6 mr-2" />
+          Zpět
         </Link>
-        <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
-          <Star fill="currentColor" /> {score}
+        
+        <div className="flex gap-4 items-center justify-self-end sm:order-3">
+          <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
+            <Star fill="currentColor" /> {score}
+          </div>
+          <button 
+            onClick={generateGame}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            title="Nová hra"
+          >
+            <RefreshCw className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
-      </div>
 
-      <h2 className="text-3xl font-bold text-blue-800 mb-12">Sčítání do {maxNumber}</h2>
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-blue-800 text-center sm:order-2">
+          Sčítání do {maxNumber}
+        </h1>
+      </div>
 
       <div className="flex items-center gap-4 text-6xl font-bold text-gray-800 mb-16 bg-white p-8 rounded-2xl shadow-sm border-2 border-blue-100">
         <span className="text-blue-600">{problem.a}</span>

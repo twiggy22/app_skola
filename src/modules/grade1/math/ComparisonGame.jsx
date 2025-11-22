@@ -62,16 +62,29 @@ export function ComparisonGame({ maxNumber = 20 }) {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 max-w-2xl mx-auto">
-      <div className="flex justify-between w-full mb-8">
-        <Link to="/grade1/math" className="text-blue-500 hover:text-blue-700 flex items-center gap-2">
-          <ArrowLeft /> Zpět
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
+        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors justify-self-start sm:order-1">
+          <ArrowLeft className="w-6 h-6 mr-2" />
+          Zpět
         </Link>
-        <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
-          <Star fill="currentColor" /> {score}
+        
+        <div className="flex gap-4 items-center justify-self-end sm:order-3">
+          <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
+            <Star fill="currentColor" /> {score}
+          </div>
+          <button 
+            onClick={generateGame}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            title="Nová hra"
+          >
+            <RefreshCw className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
-      </div>
 
-      <h2 className="text-3xl font-bold text-purple-800 mb-12">Porovnávání čísel (do {maxNumber})</h2>
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-purple-800 text-center sm:order-2">
+          Porovnávání čísel
+        </h1>
+      </div>
 
       <div className="flex items-center justify-center gap-8 mb-16">
         <div className="text-7xl font-bold text-blue-600 bg-white w-32 h-32 flex items-center justify-center rounded-2xl shadow-md border-2 border-blue-100">

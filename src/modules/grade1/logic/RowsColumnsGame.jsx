@@ -77,26 +77,38 @@ export function RowsColumnsGame() {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 max-w-4xl mx-auto">
-      <div className="flex justify-between w-full mb-8">
-        <Link to="/grade1/logic" className="text-purple-500 hover:text-purple-700 flex items-center gap-2">
-          <ArrowLeft /> Zpět
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
+        <Link to="/grade1/logic" className="flex items-center text-purple-600 hover:text-purple-800 transition-colors justify-self-start sm:order-1">
+          <ArrowLeft className="w-6 h-6 mr-2" />
+          Zpět
         </Link>
-        <div className="flex items-center gap-4">
-            <button 
-                onClick={() => setShowHelp(true)} 
-                className="p-2 rounded-full transition-colors text-yellow-500 hover:bg-yellow-50"
-                title="Nápověda"
-            >
-                <Lightbulb size={28} />
-            </button>
-            <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
-                <Star fill="currentColor" /> {score}
-            </div>
+        
+        <div className="flex gap-4 items-center justify-self-end sm:order-3">
+          <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
+            <Star fill="currentColor" /> {score}
+          </div>
+          <button 
+            onClick={() => setShowHelp(true)}
+            className="p-2 rounded-full hover:bg-yellow-100 text-yellow-600 transition-colors"
+            title="Nápověda"
+          >
+            <Lightbulb className="w-6 h-6" />
+          </button>
+          <button 
+            onClick={startNewRound}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            title="Nová hra"
+          >
+            <RefreshCw className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
+
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-purple-800 text-center sm:order-2">
+          Řádky a sloupce
+        </h1>
       </div>
 
-      <h2 className="text-3xl font-bold text-purple-800 mb-4 text-center flex flex-col gap-2">
-        <span className="text-gray-500 text-lg uppercase tracking-wider">Úkol:</span>
+      <h2 className="text-2xl font-bold text-purple-800 mb-4 text-center flex flex-col gap-2">
         {task.type === 'ROW' && (
           <span className="flex items-center gap-2 justify-center">
             Vyber <span className="text-5xl text-purple-600 mx-2">{task.targetRow}.</span> řádek <span className="text-4xl">➡️</span>

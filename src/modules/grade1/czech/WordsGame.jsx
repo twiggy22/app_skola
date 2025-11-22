@@ -156,27 +156,36 @@ export function WordsGame() {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 max-w-2xl mx-auto">
-      <div className="flex justify-between w-full mb-8">
-        <Link to="/grade1/czech" className="text-orange-500 hover:text-orange-700 flex items-center gap-2">
-          <ArrowLeft /> Zpět
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
+        <Link to="/grade1/czech" className="flex items-center text-orange-600 hover:text-orange-800 transition-colors justify-self-start sm:order-1">
+          <ArrowLeft className="w-6 h-6 mr-2" />
+          Zpět
         </Link>
-        <div className="flex items-center gap-4">
-            <button 
-                onClick={() => setShowHelp(true)} 
-                className="p-2 rounded-full transition-colors text-yellow-500 hover:bg-yellow-50"
-                title="Nápověda"
-            >
-                <Lightbulb size={28} />
-            </button>
-            <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
-                <Star fill="currentColor" /> {score}
-            </div>
+        
+        <div className="flex gap-4 items-center justify-self-end sm:order-3">
+          <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
+            <Star fill="currentColor" /> {score}
+          </div>
+          <button 
+            onClick={() => setShowHelp(true)}
+            className="p-2 rounded-full hover:bg-yellow-100 text-yellow-600 transition-colors"
+            title="Nápověda"
+          >
+            <Lightbulb className="w-6 h-6" />
+          </button>
+          <button 
+            onClick={startNewRound}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            title="Nová hra"
+          >
+            <RefreshCw className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
-      </div>
 
-      <h2 className="text-3xl font-bold text-orange-800 mb-8">
-        {gameMode === 'word-to-image' ? 'Najdi obrázek ke slovu' : 'Najdi slovo k obrázku'}
-      </h2>
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-orange-800 text-center sm:order-2">
+          {gameMode === 'word-to-image' ? 'Najdi obrázek ke slovu' : 'Najdi slovo k obrázku'}
+        </h1>
+      </div>
 
       <div className="flex items-center justify-center w-64 h-40 bg-white rounded-3xl shadow-sm border-2 border-orange-100 mb-12 px-4">
         <span className={`${gameMode === 'word-to-image' ? 'text-5xl' : 'text-8xl'} font-bold text-orange-600`}>

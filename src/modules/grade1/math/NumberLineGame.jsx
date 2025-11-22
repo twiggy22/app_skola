@@ -10,7 +10,7 @@ export function NumberLineGame({ maxNumber = 20 }) {
   const [score, setScore] = useState(0);
   const [sequence, setSequence] = useState([]);
   const [options, setOptions] = useState([]);
-  const [draggedItem, setDraggedItem] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [isComplete, setIsComplete] = useState(false);
   const [message, setMessage] = useState('');
   const [playerName, setPlayerName] = useState('');
@@ -20,8 +20,8 @@ export function NumberLineGame({ maxNumber = 20 }) {
   const generateGame = () => {
     setIsComplete(false);
     
-    // Determine sequence length (e.g., 5 numbers)
-    const length = 5;
+    // Determine sequence length (e.g., 7 numbers for better wrapping/snake effect)
+    const length = 7;
     // Random start number so sequence fits in maxNumber
     // max start = maxNumber - length + 1
     const maxStart = Math.max(1, maxNumber - length + 1);
@@ -39,8 +39,8 @@ export function NumberLineGame({ maxNumber = 20 }) {
       });
     }
 
-    // Pick 2 random positions to be missing
-    while (missingIndices.length < 2) {
+    // Pick 3 random positions to be missing (increased from 2)
+    while (missingIndices.length < 3) {
       const idx = Math.floor(Math.random() * length);
       if (!missingIndices.includes(idx)) {
         missingIndices.push(idx);
@@ -64,69 +64,49 @@ export function NumberLineGame({ maxNumber = 20 }) {
     generateGame();
   }, [maxNumber]);
 
-  const handleDragStart = (e, item) => {
-    setDraggedItem(item);
-    // For mobile/touch support we might need more complex handling, 
-    // but for standard HTML5 DnD:
-    e.dataTransfer.setData('text/plain', JSON.stringify(item));
-    e.dataTransfer.effectAllowed = 'move';
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault(); // Necessary to allow dropping
-    e.dataTransfer.dropEffect = 'move';
-  };
-
-  const handleDrop = (e, index) => {
-    e.preventDefault();
-    const targetSlot = sequence[index];
-    
-    if (!targetSlot.isMissing) return;
-
-    const droppedValue = draggedItem.value;
-    const previousValue = targetSlot.filledValue;
-
-    // Update sequence
-    const newSequence = [...sequence];
-    newSequence[index].filledValue = droppedValue;
-    setSequence(newSequence);
-
-    if (droppedValue !== targetSlot.value) {
-      setMessage('Zkus to znovu');
+  const handleOptionClick = (option) => {
+    if (selectedOption && selectedOption.id === option.id) {
+      setSelectedOption(null); // Deselect
     } else {
-      setMessage('');
+      setSelectedOption(option); // Select
     }
-
-    // Update options
-    // 1. Remove the dropped value from options
-    let newOptions = options.filter(opt => opt.id !== draggedItem.id);
-    
-    // 2. If there was a value there before, add it back to options
-    if (previousValue !== null) {
-        newOptions.push({
-            id: `opt-${previousValue}`,
-            value: previousValue
-        });
-    }
-    setOptions(newOptions);
-
-    // Check win condition
-    const allCorrect = newSequence.every(item => 
-        !item.isMissing || item.filledValue === item.value
-    );
-
-    if (allCorrect) {
-        setIsComplete(true);
-        setMessage('Správně! 🎉');
-        setScore(s => s + 1);
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    }
-    
-    setDraggedItem(null);
   };
 
   const handleSlotClick = (index) => {
     const slot = sequence[index];
+    
+    // Case 1: Slot is empty and we have a selected option -> Place it
+    if (slot.isMissing && slot.filledValue === null && selectedOption) {
+      const newSequence = [...sequence];
+      newSequence[index].filledValue = selectedOption.value;
+      setSequence(newSequence);
+
+      // Remove from options
+      setOptions(prev => prev.filter(o => o.id !== selectedOption.id));
+      setSelectedOption(null);
+
+      // Check correctness immediately (optional, or wait for check)
+      if (selectedOption.value !== slot.value) {
+        setMessage('Zkus to znovu');
+      } else {
+        setMessage('');
+      }
+
+      // Check win
+      const allCorrect = newSequence.every(item => 
+        !item.isMissing || item.filledValue === item.value
+      );
+
+      if (allCorrect) {
+        setIsComplete(true);
+        setMessage('Správně! 🎉');
+        setScore(s => s + 1);
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+      }
+      return;
+    }
+
+    // Case 2: Slot is filled -> Remove it (return to options)
     if (!slot.isMissing || slot.filledValue === null || isComplete) return;
 
     // Return value to options
@@ -160,13 +140,13 @@ export function NumberLineGame({ maxNumber = 20 }) {
 
   return (
     <div className="p-6 max-w-4xl mx-auto flex flex-col items-center">
-      <div className="w-full flex items-center justify-between mb-12">
-        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4">
+        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors justify-self-start sm:order-1">
           <ArrowLeft className="w-6 h-6 mr-2" />
           Zpět
         </Link>
-        <h1 className="text-3xl font-bold text-teal-600">Číselná osa</h1>
-        <div className="flex gap-4 items-center">
+        
+        <div className="flex gap-4 items-center justify-self-end sm:order-3">
           <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
             <Star fill="currentColor" /> {score}
           </div>
@@ -185,32 +165,27 @@ export function NumberLineGame({ maxNumber = 20 }) {
             <RefreshCw className="w-6 h-6 text-gray-600" />
           </button>
         </div>
+
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-teal-600 text-center sm:order-2">Číselná osa</h1>
       </div>
 
       {/* The Number Line */}
-      <div className="w-full overflow-x-auto mb-20 bg-teal-50 rounded-3xl shadow-inner">
-        <div className="relative min-w-[600px] flex items-center justify-between gap-2 px-4 py-12">
-          {/* Line background */}
-          <div className="absolute left-4 right-4 top-1/2 h-2 bg-teal-200 -z-0 rounded-full"></div>
-
+      <div className="w-full mb-12 bg-teal-50 rounded-3xl shadow-inner p-4 md:p-8">
+        <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 max-w-[320px] md:max-w-full mx-auto">
           {sequence.map((item, index) => (
-            <div key={index} className="relative z-10 flex flex-col items-center flex-shrink-0">
-            {/* Tick mark */}
-            <div className="w-1 h-4 bg-teal-400 mb-2"></div>
+            <div key={index} className="relative z-10 flex flex-col items-center">
             
             {/* Number Circle or Drop Zone */}
             {!item.isMissing ? (
-              <div className="w-16 h-16 rounded-full bg-white border-4 border-teal-500 flex items-center justify-center text-2xl font-bold text-gray-700 shadow-md">
+              <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white border-4 border-teal-500 flex items-center justify-center text-xl md:text-3xl font-bold text-gray-700 shadow-md select-none">
                 {item.value}
               </div>
             ) : (
               <div 
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, index)}
                 onClick={() => handleSlotClick(index)}
-                className={`w-16 h-16 rounded-full border-4 border-dashed flex items-center justify-center text-2xl font-bold transition-all cursor-pointer
+                className={`w-14 h-14 md:w-20 md:h-20 rounded-full border-4 border-dashed flex items-center justify-center text-xl md:text-3xl font-bold transition-all cursor-pointer select-none
                   ${item.filledValue === null 
-                    ? 'bg-white/50 border-teal-300 text-transparent hover:bg-teal-100' 
+                    ? (selectedOption ? 'bg-yellow-50 border-yellow-400 animate-pulse scale-105' : 'bg-white/50 border-teal-300 text-transparent hover:bg-teal-100')
                     : item.filledValue === item.value
                         ? 'bg-green-100 border-green-500 text-green-700 scale-110' 
                         : 'bg-red-100 border-red-500 text-red-700 hover:bg-red-200'
@@ -225,8 +200,8 @@ export function NumberLineGame({ maxNumber = 20 }) {
         </div>
       </div>
 
-      {/* Draggable Options */}
-      <div className="flex gap-6 min-h-[100px]">
+      {/* Options */}
+      <div className="flex flex-wrap justify-center gap-4 min-h-[100px]">
         {isComplete ? (
           <div className="text-center animate-bounce">
             <h2 className="text-2xl font-bold text-green-600 mb-4">Skvěle! Osa je kompletní! 🎉</h2>
@@ -239,14 +214,18 @@ export function NumberLineGame({ maxNumber = 20 }) {
           </div>
         ) : (
           options.map((opt) => (
-            <div
+            <button
               key={opt.id}
-              draggable
-              onDragStart={(e) => handleDragStart(e, opt)}
-              className="w-16 h-16 rounded-full bg-orange-400 text-white flex items-center justify-center text-2xl font-bold shadow-lg cursor-grab active:cursor-grabbing hover:scale-110 transition-transform"
+              onClick={() => handleOptionClick(opt)}
+              className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all transform
+                ${selectedOption && selectedOption.id === opt.id 
+                    ? 'bg-yellow-400 text-white scale-110 ring-4 ring-yellow-200 z-20' 
+                    : 'bg-orange-400 text-white hover:scale-105 hover:bg-orange-500'
+                }
+              `}
             >
               {opt.value}
-            </div>
+            </button>
           ))
         )}
       </div>
@@ -315,8 +294,9 @@ export function NumberLineGame({ maxNumber = 20 }) {
               </p>
               <ul className="list-disc list-inside space-y-2 ml-2">
                 <li>Dole vidíš oranžová kolečka s čísly.</li>
-                <li>Chyť číslo myší (nebo prstem) a <strong>přetáhni ho</strong> na správné prázdné místo na ose.</li>
-                <li>Pokud uděláš chybu (číslo zčervená), můžeš na něj <strong>kliknout</strong> a vrátit ho zpět, nebo ho přepsat jiným číslem.</li>
+                <li><strong>Klikni</strong> na číslo, které chceš použít (označí se žlutě).</li>
+                <li>Potom <strong>klikni</strong> na prázdné místo na ose, kam číslo patří.</li>
+                <li>Pokud uděláš chybu (číslo zčervená), klikni na něj znovu, aby se vrátilo zpět.</li>
                 <li>Čísla jdou po sobě (např. 1, 2, 3, 4...).</li>
               </ul>
               <p>

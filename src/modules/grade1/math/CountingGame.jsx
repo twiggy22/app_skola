@@ -66,20 +66,31 @@ export function CountingGame() {
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
-      <div className="flex justify-between w-full max-w-md mb-8">
-        <Link to="/grade1/math" className="text-blue-500 hover:text-blue-700 flex items-center gap-2">
-          <ArrowLeft /> Zpět
+      <div className="w-full grid grid-cols-2 sm:flex sm:items-center sm:justify-between mb-8 gap-4 max-w-4xl">
+        <Link to="/grade1/math" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors justify-self-start sm:order-1">
+          <ArrowLeft className="w-6 h-6 mr-2" />
+          Zpět
         </Link>
         
-        <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
-          <Star fill="currentColor" /> {score}
+        <div className="flex gap-4 items-center justify-self-end sm:order-3">
+          <div className="flex items-center gap-2 text-yellow-500 font-bold text-xl">
+            <Star fill="currentColor" /> {score}
+          </div>
+          <button 
+            onClick={generateGame}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            title="Nová hra"
+          >
+            <RefreshCw className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
-        <button onClick={generateGame} className="text-blue-500 hover:text-blue-700">
-          <RefreshCw />
-        </button>
+
+        <h1 className="col-span-2 text-2xl sm:text-3xl font-bold text-blue-800 text-center sm:order-2">
+          Počítání
+        </h1>
       </div>
 
-      <h2 className="text-2xl font-bold text-blue-800 mb-8">Kolik je tu jablíček?</h2>
+      <h2 className="text-xl font-bold text-blue-600 mb-8">Kolik je tu jablíček?</h2>
 
       <div className="flex flex-wrap justify-center gap-4 mb-12 min-h-[200px] items-center">
         {Array.from({ length: targetNumber }).map((_, i) => (
