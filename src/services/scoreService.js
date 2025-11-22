@@ -34,6 +34,7 @@ export const saveScore = async (playerName, gameId, score) => {
     // Determine category
     const isMath = gameId.startsWith('math-');
     const isCzech = gameId.startsWith('czech-');
+    const isLogic = gameId.startsWith('logic-');
 
     if (playerSnap.exists()) {
       const updateData = {
@@ -46,6 +47,7 @@ export const saveScore = async (playerName, gameId, score) => {
 
       if (isMath) updateData.totalScoreMath = increment(score);
       if (isCzech) updateData.totalScoreCzech = increment(score);
+      if (isLogic) updateData.totalScoreLogic = increment(score);
 
       await setDoc(playerRef, updateData, { merge: true });
     } else {
@@ -60,6 +62,7 @@ export const saveScore = async (playerName, gameId, score) => {
 
       if (isMath) initialData.totalScoreMath = score;
       if (isCzech) initialData.totalScoreCzech = score;
+      if (isLogic) initialData.totalScoreLogic = score;
 
       await setDoc(playerRef, initialData);
     }
@@ -90,6 +93,7 @@ export const getGlobalLeaderboard = async (category = 'all', limitCount = 10) =>
         
         if (category === 'math') score = data.totalScoreMath || 0;
         else if (category === 'czech') score = data.totalScoreCzech || 0;
+        else if (category === 'logic') score = data.totalScoreLogic || 0;
         else score = data.totalScore || 0;
 
         return { id: doc.id, ...data, score };
@@ -153,6 +157,9 @@ export const getTopScores = async (gameId, limitCount = 10) => {
   }
   if (gameId === 'global-czech') {
     return getGlobalLeaderboard('czech', limitCount);
+  }
+  if (gameId === 'global-logic') {
+    return getGlobalLeaderboard('logic', limitCount);
   }
   return getGameLeaderboard(gameId, limitCount);
 };
