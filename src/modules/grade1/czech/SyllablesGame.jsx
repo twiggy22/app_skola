@@ -40,7 +40,8 @@ export function SyllablesGame() {
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState('');
-  const [gameMode, setGameMode] = useState('upper-to-lower'); // 'upper-to-lower' | 'lower-to-upper'
+  const [gameMode, setGameMode] = useState('upper-to-lower'); // 'upper-to-lower' | 'lower-to-upper' | 'block-to-cursive' | 'cursive-to-block'
+  const [roundCase, setRoundCase] = useState('upper'); // 'upper' | 'lower'
   const [showHelp, setShowHelp] = useState(false);
   const [playerName, setPlayerName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -54,6 +55,7 @@ export function SyllablesGame() {
     const currentSyllables = getSyllables();
     const randomPair = currentSyllables[Math.floor(Math.random() * currentSyllables.length)];
     setCurrentPair(randomPair);
+    setRoundCase(Math.random() > 0.5 ? 'upper' : 'lower');
 
     // Generate 3 wrong options
     const wrongOptions = [];
@@ -92,9 +94,21 @@ export function SyllablesGame() {
   };
 
   const toggleMode = () => {
-    setGameMode(prev => prev === 'upper-to-lower' ? 'lower-to-upper' : 'upper-to-lower');
+    const modes = ['upper-to-lower', 'lower-to-upper', 'block-to-cursive', 'cursive-to-block'];
+    const currentIndex = modes.indexOf(gameMode);
+    const nextMode = modes[(currentIndex + 1) % modes.length];
+    setGameMode(nextMode);
     setScore(0);
-    startNewRound();
+  };
+
+  const getModeLabel = () => {
+    switch (gameMode) {
+      case 'upper-to-lower': return 'Velká → Malá';
+      case 'lower-to-upper': return 'Malá → Velká';
+      case 'block-to-cursive': return 'Tiskací → Psací';
+      case 'cursive-to-block': return 'Psací → Tiskací';
+      default: return '';
+    }
   };
 
   const handleSaveScore = async (e) => {
@@ -113,7 +127,37 @@ export function SyllablesGame() {
 
   if (!currentPair) return null;
 
-  const targetText = gameMode === 'upper-to-lower' ? currentPair.upper : currentPair.lower;
+  let targetContent, targetClass, optionContentFn, optionClass;
+
+  switch (gameMode) {
+    case 'upper-to-lower':
+      targetContent = currentPair.upper;
+      targetClass = '';
+      optionContentFn = (p) => p.lower;
+      optionClass = '';
+      break;
+    case 'lower-to-upper':
+      targetContent = currentPair.lower;
+      targetClass = '';
+      optionContentFn = (p) => p.upper;
+      optionClass = '';
+      break;
+    case 'block-to-cursive':
+      targetContent = currentPair[roundCase];
+      targetClass = '';
+      optionContentFn = (p) => p[roundCase];
+      optionClass = 'font-cursive text-5xl';
+      break;
+    case 'cursive-to-block':
+      targetContent = currentPair[roundCase];
+      targetClass = 'font-cursive text-7xl';
+      optionContentFn = (p) => p[roundCase];
+      optionClass = '';
+      break;
+    default:
+      targetContent = currentPair.upper;
+      optionContentFn = (p) => p.lower;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center p-4 max-w-2xl mx-auto">
@@ -136,26 +180,30 @@ export function SyllablesGame() {
       </div>
 
       <h2 className="text-3xl font-bold text-orange-800 mb-8">
-        {gameMode === 'upper-to-lower' ? 'Najdi malou slabiku' : 'Najdi velkou slabiku'}
+        {getModeLabel()}
       </h2>
 
       <div className="flex items-center justify-center w-48 h-40 bg-white rounded-3xl shadow-sm border-2 border-orange-100 mb-12">
-        <span className="text-7xl font-bold text-orange-600">{targetText}</span>
+        <span className={`text-7xl font-bold text-orange-600 ${targetClass}`}>
+          {targetContent}
+        </span>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-        {options.map((option, index) => {
-          const displayText = gameMode === 'upper-to-lower' ? option.lower : option.upper;
-          return (
-            <button
-              key={index}
-              onClick={() => handleOptionClick(option)}
-              className="w-24 h-24 rounded-2xl bg-white border-b-4 border-orange-200 hover:border-orange-400 text-4xl font-bold text-orange-600 hover:-translate-y-1 transition-all shadow-lg active:border-b-0 active:translate-y-1 flex items-center justify-center"
-            >
-              {displayText}
-            </button>
-          );
-        })}
+        {options.map((option, index) => (
+          <button
+            key={index}
+            onClick={() => handleOptionClick(option)}
+            className={`
+              w-24 h-24 rounded-2xl bg-white border-b-4 border-orange-200 hover:border-orange-400 
+              text-4xl font-bold text-orange-600 hover:-translate-y-1 transition-all shadow-lg 
+              active:border-b-0 active:translate-y-1 flex items-center justify-center
+              ${optionClass}
+            `}
+          >
+            {optionContentFn(option)}
+          </button>
+        ))}
       </div>
 
       <div className="flex justify-center mb-8">
@@ -164,7 +212,7 @@ export function SyllablesGame() {
           className="flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors font-semibold text-sm"
         >
           <RefreshCw size={16} />
-          {gameMode === 'upper-to-lower' ? 'Přepnout na: malé → VELKÉ' : 'Přepnout na: VELKÉ → malé'}
+          Změnit režim: {getModeLabel()}
         </button>
       </div>
 

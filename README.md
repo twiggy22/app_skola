@@ -23,6 +23,9 @@ Interaktivní výuková aplikace pro děti na prvním stupni ZŠ.
 - 🧩 **Skládání**: Skládání slov ze slabik (AU-TO).
 - ✏️ **Doplňovačka**: Doplňování slov do vět.
 
+### 1. Třída - Logika
+- 🏁 **Řádky a sloupce**: Orientace v mřížce (5x5). Hledání řádků, sloupců a konkrétních políček.
+
 ### Gamifikace 🏆
 - **Ukládání skóre**: Hráči si mohou uložit své výsledky pod svým jménem.
 - **Žebříčky**:

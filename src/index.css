@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.font-cursive {
+  font-family: 'Dancing Script', cursive;
+}

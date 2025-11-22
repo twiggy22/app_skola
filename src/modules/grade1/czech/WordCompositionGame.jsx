@@ -45,6 +45,17 @@ const WORDS_DATA = [
   { word: 'DORT', syllables: ['DORT'], emoji: '🎂' },
   { word: 'MLÉKO', syllables: ['MLÉ', 'KO'], emoji: '🥛' },
   { word: 'ROHLÍK', syllables: ['ROH', 'LÍK'], emoji: '🥐' },
+  { word: 'MALINA', syllables: ['MA', 'LI', 'NA'], emoji: '🍓' },
+  { word: 'MOLO', syllables: ['MO', 'LO'], emoji: '⚓' },
+  { word: 'MOL', syllables: ['MOL'], emoji: '🦋' },
+  { word: 'MASO', syllables: ['MA', 'SO'], emoji: '🥩' },
+  { word: 'EMA', syllables: ['E', 'MA'], emoji: '👧' },
+  { word: 'ELA', syllables: ['E', 'LA'], emoji: '👧' },
+  { word: 'PEPA', syllables: ['PE', 'PA'], emoji: '👦' },
+  { word: 'MÍSA', syllables: ['MÍ', 'SA'], emoji: '🥣' },
+  { word: 'ESO', syllables: ['E', 'SO'], emoji: '🂡' },
+  { word: 'MELOUN', syllables: ['ME', 'LOUN'], emoji: '🍉' },
+  { word: 'OSEL', syllables: ['O', 'SEL'], emoji: '🫏' },
 ];
 
 const getAllowedWords = () => {

@@ -54,6 +54,17 @@ const WORDS = [
   { text: 'DORT', emoji: '🎂' },
   { text: 'MLÉKO', emoji: '🥛' },
   { text: 'ROHLÍK', emoji: '🥐' },
+  { text: 'MALINA', emoji: '🍓' },
+  { text: 'MOLO', emoji: '⚓' },
+  { text: 'MOL', emoji: '🦋' },
+  { text: 'MASO', emoji: '🥩' },
+  { text: 'EMA', emoji: '👧' },
+  { text: 'ELA', emoji: '👧' },
+  { text: 'PEPA', emoji: '👦' },
+  { text: 'MÍSA', emoji: '🥣' },
+  { text: 'ESO', emoji: '🂡' },
+  { text: 'MELOUN', emoji: '🍉' },
+  { text: 'OSEL', emoji: '🫏' },
 ];
 
 const getAllowedWords = () => {
