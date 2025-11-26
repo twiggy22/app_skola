@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { GraduationCap, Calculator, BookOpen, Mail } from 'lucide-react';
+import { GraduationCap, Calculator, BookOpen, Mail, Brain } from 'lucide-react';
 
 export function Layout() {
   const location = useLocation();
@@ -36,6 +36,18 @@ export function Layout() {
             >
               <BookOpen size={20} />
               <span className="hidden sm:inline">Čeština</span>
+            </Link>
+
+            <Link 
+              to="/grade1/logic" 
+              className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                isActive('/grade1/logic') 
+                  ? 'bg-purple-100 text-purple-700 font-bold' 
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-purple-600'
+              }`}
+            >
+              <Brain size={20} />
+              <span className="hidden sm:inline">Logika</span>
             </Link>
           </div>
         </div>

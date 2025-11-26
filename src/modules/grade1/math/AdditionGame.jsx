@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Star, RefreshCw, ArrowLeft, Frown, Save, Trophy } from 'lucide-react';
+import { Star, RefreshCw, ArrowLeft, Frown, Save, Trophy, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { saveScore } from '../../../services/scoreService';
 import { Leaderboard } from '../../../components/Leaderboard';
 
 export function AdditionGame({ maxNumber = 20 }) {
   const [problem, setProblem] = useState({ a: 0, b: 0, result: 0 });
-  const [options, setOptions] = useState([]);
+  const [userAnswer, setUserAnswer] = useState('');
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState('');
   const [isSolved, setIsSolved] = useState(false);
@@ -17,38 +17,46 @@ export function AdditionGame({ maxNumber = 20 }) {
 
   const generateGame = () => {
     setIsSolved(false);
+    setUserAnswer('');
     // Generate numbers so sum is <= maxNumber
     const a = Math.floor(Math.random() * (maxNumber + 1)); 
     const b = Math.floor(Math.random() * (maxNumber - a + 1));
     const result = a + b;
     
     setProblem({ a, b, result });
-    
-    // Generate options
-    const newOptions = [result];
-    while (newOptions.length < 3) {
-      const random = Math.floor(Math.random() * (maxNumber + 1));
-      if (!newOptions.includes(random)) {
-        newOptions.push(random);
-      }
-    }
-    setOptions(newOptions.sort(() => Math.random() - 0.5));
     setMessage('');
   };
 
   useEffect(() => {
     generateGame();
+    const savedName = localStorage.getItem('playerName');
+    if (savedName) {
+      setPlayerName(savedName);
+    }
   }, [maxNumber]); // Re-generate if maxNumber changes
 
-  const handleGuess = (guess) => {
+  const handleCheck = (e) => {
+    e?.preventDefault();
+    if (!userAnswer) return;
+    
+    const guess = parseInt(userAnswer, 10);
     if (guess === problem.result) {
       setIsSolved(true);
       setMessage('Správně! 🎉');
       setScore(score + 1);
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-      setTimeout(generateGame, 1500);
     } else {
       setMessage('Zkus to znovu');
+      // Don't clear answer immediately so user can see what they typed, 
+      // but focus is already there. 
+      // Actually user requested: "pokud u odcitani zadam spatny vysledek tak ramecek kolem inputu zustane uz trvale cerveny. podle me by pak mel byt zeleny a s novym prikladem neutralni"
+      // So I will keep the answer but mark it as error via message state
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleCheck();
     }
   };
 
@@ -56,6 +64,7 @@ export function AdditionGame({ maxNumber = 20 }) {
     e.preventDefault();
     if (!playerName.trim()) return;
 
+    localStorage.setItem('playerName', playerName);
     setIsSaving(true);
     const success = await saveScore(playerName, 'math-addition', score);
     setIsSaving(false);
@@ -92,7 +101,7 @@ export function AdditionGame({ maxNumber = 20 }) {
         </h1>
       </div>
 
-      <div className="flex items-center gap-4 text-6xl font-bold text-gray-800 mb-16 bg-white p-8 rounded-2xl shadow-sm border-2 border-blue-100">
+      <div className="flex items-center gap-4 text-6xl font-bold text-gray-800 mb-8 bg-white p-8 rounded-2xl shadow-sm border-2 border-blue-100">
         <span className="text-blue-600">{problem.a}</span>
         <span>+</span>
         <span className="text-purple-600">{problem.b}</span>
@@ -102,20 +111,41 @@ export function AdditionGame({ maxNumber = 20 }) {
             {problem.result}
           </span>
         ) : (
-          <span className="w-24 h-24 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400">?</span>
+          <input
+            type="number"
+            value={userAnswer}
+            onChange={(e) => {
+              setUserAnswer(e.target.value);
+              if (message) setMessage(''); // Clear error on type
+            }}
+            onKeyDown={handleKeyDown}
+            className={`w-24 h-24 bg-white rounded-xl border-2 text-center text-gray-800 outline-none focus:ring-4 transition-all
+              ${message.includes('Zkus') 
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-100' 
+                : 'border-blue-200 focus:border-blue-500 focus:ring-blue-100'
+              }`}
+            placeholder="?"
+            autoFocus
+          />
         )}
       </div>
 
-      <div className="flex gap-6 flex-wrap justify-center">
-        {options.map((opt) => (
-          <button
-            key={opt}
-            onClick={() => handleGuess(opt)}
-            className="w-24 h-24 rounded-2xl bg-white border-b-4 border-blue-200 hover:border-blue-400 text-4xl font-bold text-blue-600 hover:-translate-y-1 transition-all shadow-lg active:border-b-0 active:translate-y-1"
+      <div className="mb-8">
+        {isSolved ? (
+          <button 
+            onClick={generateGame}
+            className="px-8 py-3 bg-blue-500 text-white text-xl rounded-full hover:bg-blue-600 transition-colors shadow-lg font-bold flex items-center gap-2 animate-bounce"
           >
-            {opt}
+            Další příklad <ArrowLeft className="rotate-180" />
           </button>
-        ))}
+        ) : (
+          <button
+            onClick={handleCheck}
+            className="px-8 py-3 bg-green-500 text-white text-xl rounded-full hover:bg-green-600 transition-colors shadow-lg font-bold flex items-center gap-2"
+          >
+            <Check /> Zkontrolovat
+          </button>
+        )}
       </div>
 
       {message && (
