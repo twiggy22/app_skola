@@ -22,6 +22,13 @@ export function LogicDashboard() {
           <h3 className="text-xl font-bold text-gray-800">Řádky a sloupce</h3>
           <p className="text-gray-500 text-sm">Orientace v mřížce</p>
         </Link>
+
+        {/* Shapes Math (ovoce -> čísla) */}
+        <Link to="shapes-math" className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border-b-4 border-purple-200 hover:-translate-y-1 flex flex-col items-center gap-4 w-full max-w-[250px]">
+          <div className="text-6xl mb-2">🍎🍐🍑</div>
+          <h3 className="text-xl font-bold text-gray-800">Tvary a čísla</h3>
+          <p className="text-gray-500 text-sm">Ovoce představuje čísla — sčítání/odčítání</p>
+        </Link>
       </div>
 
       {/* Global Leaderboard */}

@@ -5,7 +5,7 @@ export const GameConfig = {
     // Písmena, která už děti znají. Hry budou generovat obsah pouze z těchto písmen.
     // Stačí přidat nové písmeno do řetězce (např. "MALESO" -> "MALESOP").
     // Nerozlišuje se velikost písmen (a=A).
-    allowedLetters: "M A L E S O P U I N", 
+    allowedLetters: "M A L E S O P U I N T V K", 
   }
 };
 

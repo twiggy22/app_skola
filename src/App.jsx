@@ -21,6 +21,7 @@ import { ClockGame } from './modules/grade1/math/ClockGame';
 import { MoneyGame } from './modules/grade1/math/MoneyGame';
 import { LogicDashboard } from './modules/grade1/logic/LogicDashboard';
 import { RowsColumnsGame } from './modules/grade1/logic/RowsColumnsGame';
+import { ShapesMathGame } from './modules/grade1/logic/ShapesMathGame';
 import { GameConfig } from './config';
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
           
           <Route path="grade1/logic" element={<LogicDashboard />} />
           <Route path="grade1/logic/rows-columns" element={<RowsColumnsGame />} />
+          <Route path="grade1/logic/shapes-math" element={<ShapesMathGame />} />
 
           <Route path="grade1/czech" element={<CzechDashboard />} />
           <Route path="grade1/czech/letters" element={<LettersGame />} />
